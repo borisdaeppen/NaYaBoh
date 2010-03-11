@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Proxy Statistics
+Comment=see sarg statistics of squid in firefox
+Terminal=false
+Exec=firefox /opt/nayaboh/proxy_stats/index.html
+Icon=/opt/nayaboh/icon48.png
+Type=Application
+Categories=System;

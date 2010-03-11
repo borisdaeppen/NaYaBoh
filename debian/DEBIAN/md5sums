@@ -1,0 +1,14 @@
+
+5b2266d2da2801a9e93174fd0c72280f  /opt/nayaboh/config_files/etc_apt_sources.list
+7b37abd4f1a4318b54a2a9fcd0b40b34  /opt/nayaboh/config_files/crontab.sarg
+8c031069f8df7d68a982f65b8be426e8  /opt/nayaboh/config_files/etc_squid_squid.conf
+37e622d23ac39c76b93ccd581f68c704  /opt/nayaboh/config_files/etc_dnsmasq.conf
+5423f486ff065761dc454e3bc69f3d4f  /opt/nayaboh/config_files/etc_network_interfaces
+a1d30533bcb72869d9e8df79d3604a20  /opt/nayaboh/config_files/etc_rc.local
+956dbed7b6a0ea134084f74f217ac6c8  /opt/nayaboh/icon48.png
+8f0e2cd40e05189ec81232da84bd6e1a  /opt/nayaboh/COPYING
+099249a481b95bebe39842feafcd892b  /usr/bin/nayaboh_setup
+a50387d9ec0ed9c06d6bbf3faa5bd6d1  /usr/share/applications/nayaboh_proxyview.desktop
+961a58489486108972730488a9c037ff  /usr/share/applications/nayaboh_install.desktop
+7748aa2cf029cbb701f67d5d140befd7  /usr/share/applications/nayaboh_installreport.desktop
+c1b964a3efafc8fb8d279cf9f7ebb289  /usr/share/applications/nayaboh_proxystats.desktop

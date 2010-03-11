@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Proxy Log View
+Comment=follow the logfile of squid
+Exec=sudo Xdialog --title "Internet Proxy Requests" --tailbox /var/log/squid/access.log 24 150
+Icon=/opt/nayaboh/icon48.png
+Type=Application
+Categories=System;
+Terminal=false

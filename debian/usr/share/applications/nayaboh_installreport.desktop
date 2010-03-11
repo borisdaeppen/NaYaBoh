@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=NaYaBoh Installation Report
+Comment=see a report of the NaYaBoh installation
+Terminal=false
+Exec=sudo Xdialog --title "NaYaBoh Installation Report" --textbox /opt/nayaboh/install.log 24 80
+Icon=/opt/nayaboh/icon48.png
+Type=Application
+Categories=System;

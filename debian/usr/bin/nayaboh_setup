@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# Copyright 2010 Boris Daeppen <boris_daeppen@bluewin.ch>
+# 
+# This file is part of NaYaBoh.
+# 
+# NaYaBoh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# NaYaBoh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with orgcreator.  If not, see <http://www.gnu.org/licenses/>.
+
+Xdialog --title "NaYaBoh setup" \
+        --wrap \
+        --yesno "Configure System to default values of NaYaBoh?" 0 0
+
+
+case $? in
+  0)
+    echo "Yes chosen."
+    ;;
+  1)
+    echo "No chosen."
+    exit 1
+    ;;
+  255)
+    echo "Box closed."
+    exit 1
+    ;;
+esac
+
+TIMESTAMP=$(date +%Y-%m-%d_%H:%M:%S)
+BACKUP=BACKUP_$TIMESTAMP
+LOGFILE='/opt/nayaboh/install.log'
+
+echo "" > $LOGFILE
+echo "INSTALLATION OF NaYaBoh AT $TIMESTAMP" >> $LOGFILE
+echo "----------------------------------------------" >> $LOGFILE
+echo "" >> $LOGFILE
+
+(echo "### configuring iptables" >> $LOGFILE
+cp -v /etc/rc.local /etc/rc.local_$BACKUP >> $LOGFILE
+cp -v /opt/nayaboh/config_files/etc_rc.local /etc/rc.local >> $LOGFILE
+echo 1
+
+echo "### configuring squid proxy" >> $LOGFILE
+cp -v /etc/squid/squid.conf /etc/squid/squid.conf_$BACKUP >> $LOGFILE
+cp -v /opt/nayaboh/config_files/etc_squid_squid.conf /etc/squid/squid.conf >> $LOGFILE
+echo 2
+
+echo "### configuring dns and dhcp" >> $LOGFILE
+cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf_$BACKUP >> $LOGFILE
+cp -v /opt/nayaboh/config_files/etc_dnsmasq.conf /etc/dnsmasq.conf >> $LOGFILE
+echo 3
+
+echo "### configuring network interfaces" >> $LOGFILE
+cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP >> $LOGFILE
+cp -v /opt/nayaboh/config_files/etc_network_interfaces /etc/network/interfaces >> $LOGFILE
+echo 4
+
+echo "### configuring software sources" >> $LOGFILE
+cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP >> $LOGFILE
+cp -v /opt/nayaboh/config_files/etc_apt_sources.list /etc/apt/sources.list >> $LOGFILE
+echo 5
+
+echo "### install proxy report in cron" >> $LOGFILE
+crontab /opt/nayaboh/config_files/crontab.sarg >> $LOGFILE
+echo 6
+
+
+echo "### restart network interfaces" >> $LOGFILE
+ifdown eth0 >> $LOGFILE
+echo 10
+ifdown eth1 >> $LOGFILE
+echo 15
+ifup eth0 >> $LOGFILE
+echo 25
+ifup eth1 >> $LOGFILE
+echo 30
+echo "### restart dnsmasq" >> $LOGFILE
+/etc/init.d/dnsmasq restart >> $LOGFILE
+echo 40
+echo "### restart squid" >> $LOGFILE
+/etc/init.d/squid restart >> $LOGFILE
+echo 60
+echo "### execute iptables in /etc/rc.local" >> $LOGFILE
+bash /etc/rc.local >> $LOGFILE
+echo 70
+echo "### update package database" >> $LOGFILE
+aptitude update >> $LOGFILE
+echo 90
+echo "### initialise sarg statistics" >> $LOGFILE
+/usr/bin/sarg -g e -o /opt/nayaboh/proxy_stats
+echo 100 ) | Xdialog --title "NaYaBoh setup" --gauge "Configuring and restarting services, this may take a wile..." 13 55
+
+echo "INSTALLATION FNISHED AT $(date +%Y-%m-%d_%H:%M:%S)" >> $LOGFILE
+Xdialog --title "NaYaBoh setup" \
+        --infobox "Installation finished." 13 45 5000 

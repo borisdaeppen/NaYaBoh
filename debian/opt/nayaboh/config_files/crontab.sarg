@@ -1,0 +1,1 @@
+00 06-18 * * * /usr/bin/sarg -g e -o /opt/nayaboh/proxy_stats
