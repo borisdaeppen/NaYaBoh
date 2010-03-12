@@ -6,4 +6,4 @@ Exec=sudo Xdialog --title "Internet Proxy Requests" --tailbox /var/log/squid/acc
 Icon=/opt/nayaboh/icon48.png
 Type=Application
 Categories=System;
-Terminal=false
+Terminal=true

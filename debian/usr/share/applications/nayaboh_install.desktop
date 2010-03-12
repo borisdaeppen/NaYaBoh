@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=NaYaBoh System Installation
 Comment=install very simple internet gateway: proxy, ad-blocker, dns-cache and dhcp-server
-Terminal=false
+Terminal=true
 Exec=sudo /usr/bin/nayaboh_setup
 Icon=/opt/nayaboh/icon48.png
 Type=Application
