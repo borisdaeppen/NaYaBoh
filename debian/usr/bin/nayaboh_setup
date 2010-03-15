@@ -67,7 +67,7 @@ echo 4
 
 echo "### configuring software sources" >> $LOGFILE
 cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP >> $LOGFILE
-cp -v /opt/nayaboh/config_files/etc_apt_sources.list /etc/apt/sources.list >> $LOGFILE
+cat $(ls -1rt /etc/apt/sources.list_BACKUP* | tail -1) | grep "main restricted" | egrep -v "^#|updates|universe|multiverse|security" > /etc/apt/sources.list
 echo 5
 
 echo "### install proxy report in cron" >> $LOGFILE
