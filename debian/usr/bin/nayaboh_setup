@@ -21,7 +21,6 @@ Xdialog --title "NaYaBoh setup" \
         --wrap \
         --yesno "Configure System to default values of NaYaBoh?" 0 0
 
-
 case $? in
   0)
     echo "Yes chosen."
@@ -52,7 +51,18 @@ echo 1
 
 echo "### configuring squid proxy" >> $LOGFILE
 cp -v /etc/squid/squid.conf /etc/squid/squid.conf_$BACKUP >> $LOGFILE
-cp -v /opt/nayaboh/config_files/etc_squid_squid.conf /etc/squid/squid.conf >> $LOGFILE
+total_memory=$(free -m | grep Mem | awk '{print $2}')
+squid_memory=$(echo "$total_memory / 4" | bc)
+total_disk=$(df -m . | grep '/' | awk '{print $2}')
+squid_disk=$(echo "$total_disk / 10" | bc)
+
+#add nayaboh config to beginning of squif.conf because acl deny in the middle of conf file
+sed -i "1icache_dir ufs /var/spool/squid $squid_disk 16 256" /etc/squid/squid.conf
+sed -i "2icache_mem $squid_memory MB" /etc/squid/squid.conf
+sed -i "3iacl nayaboh src 192.168.1.0/255.255.255.0" /etc/squid/squid.conf
+sed -i "4ihttp_access allow nayaboh" /etc/squid/squid.conf
+sed -i "5ihttp_port 3128 transparent" /etc/squid/squid.conf
+sed -i "6iredirect_program /usr/bin/adzapper.wrapper" /etc/squid/squid.conf
 echo 2
 
 echo "### configuring dns and dhcp" >> $LOGFILE
