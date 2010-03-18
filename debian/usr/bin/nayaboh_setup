@@ -44,9 +44,10 @@ echo "INSTALLATION OF NaYaBoh AT $TIMESTAMP" >> $LOGFILE
 echo "----------------------------------------------" >> $LOGFILE
 echo "" >> $LOGFILE
 
-(echo "### configuring iptables" >> $LOGFILE
+(echo "### configuring routing" >> $LOGFILE
 cp -v /etc/rc.local /etc/rc.local_$BACKUP >> $LOGFILE
 cp -v /opt/nayaboh/config_files/etc_rc.local /etc/rc.local >> $LOGFILE
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 echo 1
 
 echo "### configuring squid proxy" >> $LOGFILE
@@ -97,6 +98,9 @@ echo 30
 echo "### restart dnsmasq" >> $LOGFILE
 /etc/init.d/dnsmasq restart >> $LOGFILE
 echo 40
+echo "### start routing" >> $LOGFILE
+sysctl -p /etc/sysctl.conf
+echo 45
 echo "### restart squid" >> $LOGFILE
 /etc/init.d/squid restart >> $LOGFILE
 echo 60
