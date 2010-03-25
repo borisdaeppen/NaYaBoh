@@ -42,6 +42,7 @@ my $rounds = $ARGV[0];
 my @pages = ('http://www.google.com/', 'http://times.com/', 'http://www.yahoo.com/', 'https://login.yahoo.com/', 'http://www.facebook.com/', 'http://www.bbc.co.uk/');
 my $totaltime = 0;
 my %result = ();
+my $errors = 0;
 
 # loop through all pages, download them
 for (my $i=1;$i<=$rounds;$i++) {
@@ -54,13 +55,19 @@ for (my $i=1;$i<=$rounds;$i++) {
         my $start = time();
         print "Round $i:\ttry to receive $url...";
         my $status = getstore ($url, "benchmark/$saveurl");
-        die "Couldn't get $url" if (is_error($status));
+
         my $end = time();
         my $duration = $end - $start;
-
-        $result{"Round $i"}{"$saveurl"} = $duration;
-        
-        print "\tDONE\t$duration sec\n";
+        if (is_error($status)) {
+            $duration = 0;
+            $errors++;
+            $result{"Round $i"}{"$saveurl"} = 'ERROR';
+            print "\tDONE\tERROR\n";
+        }
+        else {
+            $result{"Round $i"}{"$saveurl"} = $duration;
+            print "\tDONE\t$duration sec\n";
+        }
 
         $totaltime += $duration;
     }
@@ -80,9 +87,11 @@ foreach my $round (keys %result) {
         print "\n";
 }
 print "\n\nCALCULATIONS:\n\n";
-my $req_count = scalar(@pages) * $rounds;
+my $req_count = (scalar(@pages) * $rounds) - $errors;
+unless ($req_count) { die "NO REQUESTS MADE. $errors ERRORS.\n\n"; }
 print "receiving of " . $req_count . " pages took $totaltime seconds.\n";
 print "AVARAGE: " . int( ($totaltime / $req_count) + 0.5) . " seconds per page.\n";
+print "\nThere where $errors ERRORS.\n\n";
 
 #use Data::Dumper;
 #print "\n\n\nDEBUG:\n";
