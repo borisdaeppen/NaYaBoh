@@ -17,9 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with orgcreator.  If not, see <http://www.gnu.org/licenses/>.
 
+
+# hack to enable proxy for LWP::Simple
+BEGIN { $ENV{HTTP_proxy}="http://192.168.0.1:3128" }
+
 use strict;
 use warnings;
 use LWP::Simple;
+use Net::DNS::Resolver; # uses libnet-dns-perl package in ubuntu
 
 $| = 1; # disable print buffer of Perl
 
@@ -39,10 +44,16 @@ elsif ($ARGV[0] =~ /[^0-9]/) {
 
 # initialise things I need
 my $rounds = $ARGV[0];
-my @pages = ('http://www.google.com/', 'http://times.com/', 'http://www.yahoo.com/', 'https://login.yahoo.com/', 'http://www.facebook.com/', 'http://www.bbc.co.uk/');
+my @pages = ('http://www.google.com/', 'http://times.com/', 'http://www.bbc.co.uk/', 'http://sourceforge.net/', 'http://hackles.org/');
 my $totaltime = 0;
 my %result = ();
 my $errors = 0;
+
+my $dns_resolver = Net::DNS::Resolver->new(
+      nameservers => [qw(192.168.0.1)],
+      recurse     => 1,
+      debug       => 0,
+);
 
 # loop through all pages, download them
 for (my $i=1;$i<=$rounds;$i++) {
@@ -53,8 +64,23 @@ for (my $i=1;$i<=$rounds;$i++) {
             $saveurl = $1;
         }
         my $start = time();
-        print "Round $i:\ttry to receive $url...";
-        my $status = getstore ($url, "benchmark/$saveurl");
+        print "Round $i:\ttry to receive $saveurl...";
+
+        my $query = $dns_resolver->search($saveurl);
+        my $ip = 0;
+        if ($query) {
+            foreach my $rr ($query->answer) {
+                next unless $rr->type eq "A";
+                $ip = $rr->address;
+                last; # break the loop
+            }
+        } else {
+            warn "\nquery failed: ", $dns_resolver->errorstring, "\n";
+        }
+
+
+        print "\ton $ip";
+        my $status = getstore ("http://$ip", "benchmark/$saveurl");
 
         my $end = time();
         my $duration = $end - $start;
@@ -62,7 +88,7 @@ for (my $i=1;$i<=$rounds;$i++) {
             $duration = 0;
             $errors++;
             $result{"Round $i"}{"$saveurl"} = 'ERROR';
-            print "\tDONE\tERROR\n";
+            print "\tDONE\tERROR:\t$status\n";
         }
         else {
             $result{"Round $i"}{"$saveurl"} = $duration;
