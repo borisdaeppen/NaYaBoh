@@ -25,6 +25,7 @@ use strict;
 use warnings;
 use LWP::Simple;
 use Net::DNS::Resolver; # uses libnet-dns-perl package in ubuntu
+use GD::Graph::lines;   # uses libgd-graph-perl
 
 $| = 1; # disable print buffer of Perl
 
@@ -48,6 +49,7 @@ my @pages = ('http://www.google.com/', 'http://times.com/', 'http://www.bbc.co.u
 my $totaltime = 0;
 my %result = ();
 my $errors = 0;
+my $highest = 0;
 
 my $dns_resolver = Net::DNS::Resolver->new(
       nameservers => [qw(192.168.0.1)],
@@ -92,6 +94,7 @@ for (my $i=1;$i<=$rounds;$i++) {
         }
         else {
             $result{"Round $i"}{"$saveurl"} = $duration;
+            if ($duration > $highest) { $highest = $duration; }
             print "\tDONE\t$duration sec\n";
         }
 
@@ -122,4 +125,42 @@ print "\nThere where $errors ERRORS.\n\n";
 #use Data::Dumper;
 #print "\n\n\nDEBUG:\n";
 #print Dumper(\%result);
+
+my %grapharrays = ();
+foreach my $round (keys %result) {
+    foreach my $url (keys %{$result{$round}}) {
+        if ($result{$round}{$url} =~ /ERROR/) {
+            push (@{$grapharrays{$url}}, undef);
+        }
+        else {
+            push (@{$grapharrays{$url}}, $result{$round}{$url});
+        }
+    }
+}
+
+my @data = ( [1 .. $rounds] );
+foreach my $bla (keys %grapharrays) {
+    push (@data, $grapharrays{$bla});
+}
+use Data::Dumper;
+print "\n\n\nDEBUG:\n";
+print Dumper(\@data);
+
+my $graph = GD::Graph::lines->new(800, 600);
+
+$graph->set( 
+    x_label           => "$rounds Rounds",
+    y_label           => 'Time',
+    title             => 'Benchmark',
+    y_max_value       => $highest,
+    y_tick_number     => 1,
+    y_label_skip      => 1 
+) or die $graph->error;
+
+my $gd = $graph->plot(\@data) or die $graph->error;
+
+open(IMG, '>file.png') or die $!;
+binmode IMG;
+print IMG $gd->png;
+close IMG;
 
