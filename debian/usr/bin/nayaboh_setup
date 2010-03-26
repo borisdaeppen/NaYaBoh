@@ -114,6 +114,6 @@ echo "### initialise sarg statistics" >> $LOGFILE
 /usr/bin/sarg -g e -o /opt/nayaboh/proxy_stats
 echo 100 ) | Xdialog --title "NaYaBoh setup" --gauge "Configuring and restarting services, this may take a wile..." 13 55
 
-echo "INSTALLATION FNISHED AT $(date +%Y-%m-%d_%H:%M:%S)" >> $LOGFILE
+echo "INSTALLATION FINISHED AT $(date +%Y-%m-%d_%H:%M:%S)" >> $LOGFILE
 Xdialog --title "NaYaBoh setup" \
         --infobox "Installation finished." 13 45 5000 
