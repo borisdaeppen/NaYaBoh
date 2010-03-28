@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=Proxy Log View
 Comment=follow the logfile of squid
-Exec=sudo Xdialog --title "Internet Proxy Requests" --tailbox /var/log/squid/access.log 24 150
+Exec=sudo tail -f /var/log/squid/access.log
 Icon=/opt/nayaboh/icon48.png
 Type=Application
 Categories=System;
