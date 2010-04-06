@@ -3,6 +3,6 @@ Version: 0.2
 Section: utils
 Priority: extra
 Architecture: all
-Depends: dnsmasq, squid, adzapper, iptables, sarg, gkrellm, openssh-server, xdialog
+Depends: dnsmasq, squid, adzapper, iptables, sarg, gkrellm, openssh-server, dialog
 Maintainer: Boris Däppen <boris_daeppen@bluewin.ch>
 Description: Set up a very simple internet server. Simple in terms of ready to use. The server will run the following services: DHCP, routing, web-caching, DNS-caching, advertisement blocking and also simple site-blocking through DNS. Some monitoring tools will be installed. Create your own internet server out of ubuntu. All you need is this package, an ubuntu CD and a computer with two network interfaces.

@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with orgcreator.  If not, see <http://www.gnu.org/licenses/>.
 
-Xdialog --title "NaYaBoh setup" \
-        --wrap \
+dialog --title "NaYaBoh setup" \
         --yesno "Configure System to default values of NaYaBoh?" 0 0
 
 case $? in
@@ -112,8 +111,8 @@ aptitude update >> $LOGFILE
 echo 90
 echo "### initialise sarg statistics" >> $LOGFILE
 /usr/bin/sarg -g e -o /opt/nayaboh/proxy_stats
-echo 100 ) | Xdialog --title "NaYaBoh setup" --gauge "Configuring and restarting services, this may take a wile..." 13 55
+echo 100 ) | dialog --title "NaYaBoh setup" --gauge "Configuring and restarting services, this may take a wile..." 13 55
 
 echo "INSTALLATION FINISHED AT $(date +%Y-%m-%d_%H:%M:%S)" >> $LOGFILE
-Xdialog --title "NaYaBoh setup" \
-        --infobox "Installation finished." 13 45 5000 
+dialog --title "NaYaBoh setup" \
+        --infobox "Installation finished." 13 45
