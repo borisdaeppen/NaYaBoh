@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=NaYaBoh Benchmark
+Comment=Measure the efficiency of NaYaBoh
+Terminal=true
+Exec=sudo /usr/bin/nayaboh_benchmark
+Icon=/opt/nayaboh/icon48.png
+Type=Application
+Categories=System;
