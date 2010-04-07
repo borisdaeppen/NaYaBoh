@@ -104,9 +104,9 @@ $graph->set(
     x_label           => "$rounds Rounds",
     y_label           => 'Time',
     title             => 'Benchmark',
-    y_max_value       => $highest,
-    y_tick_number     => 1,
-    y_label_skip      => 1 
+    y_max_value       => (int(($highest+4)/5)*5), # e.g: 23 -> 25
+    #y_tick_number     => 1,
+    #y_label_skip      => 1 
 ) or die $graph->error;
 
 my @sorted_time_proxy = sort {$a <=> $b } @time_proxy;
@@ -119,6 +119,7 @@ my @data = (    [1 .. ($rounds * scalar @pages)],
 #use Data::Dumper;
 #print Dumper(\@data);
 
+$graph->set_legend_font('GD::gdMediumBoldFont');
 $graph->set_legend('Direct', 'NaYaBoh');
 my $gd = $graph->plot( \@data ) or die $graph->error;
 
