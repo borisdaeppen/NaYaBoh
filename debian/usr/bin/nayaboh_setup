@@ -44,13 +44,13 @@ echo "----------------------------------------------" >> $LOGFILE
 echo "" >> $LOGFILE
 
 (echo "### configuring routing" >> $LOGFILE
-cp -v /etc/rc.local /etc/rc.local_$BACKUP >> $LOGFILE
-cp -v /opt/nayaboh/config_files/etc_rc.local /etc/rc.local >> $LOGFILE
+cp -v /etc/rc.local /etc/rc.local_$BACKUP &>> $LOGFILE
+cp -v /opt/nayaboh/config_files/etc_rc.local /etc/rc.local &>> $LOGFILE
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 echo 1
 
 echo "### configuring squid proxy" >> $LOGFILE
-cp -v /etc/squid/squid.conf /etc/squid/squid.conf_$BACKUP >> $LOGFILE
+cp -v /etc/squid/squid.conf /etc/squid/squid.conf_$BACKUP &>> $LOGFILE
 total_memory=$(free -m | grep Mem | awk '{print $2}')
 squid_memory=$(echo "$total_memory / 4" | bc)
 total_disk=$(df -m . | grep '/' | awk '{print $2}')
@@ -66,51 +66,51 @@ sed -i "6iredirect_program /usr/bin/adzapper.wrapper" /etc/squid/squid.conf
 echo 2
 
 echo "### configuring dns and dhcp" >> $LOGFILE
-cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf_$BACKUP >> $LOGFILE
-cp -v /opt/nayaboh/config_files/etc_dnsmasq.conf /etc/dnsmasq.conf >> $LOGFILE
+cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf_$BACKUP &>> $LOGFILE
+cp -v /opt/nayaboh/config_files/etc_dnsmasq.conf /etc/dnsmasq.conf &>> $LOGFILE
 echo 3
 
 echo "### configuring network interfaces" >> $LOGFILE
-cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP >> $LOGFILE
-cp -v /opt/nayaboh/config_files/etc_network_interfaces /etc/network/interfaces >> $LOGFILE
+cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP &>> $LOGFILE
+cp -v /opt/nayaboh/config_files/etc_network_interfaces /etc/network/interfaces &>> $LOGFILE
 echo 4
 
 echo "### configuring software sources" >> $LOGFILE
-cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP >> $LOGFILE
+cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP &>> $LOGFILE
 cat $(ls -1rt /etc/apt/sources.list_BACKUP* | tail -1) | egrep -v "^#|updates|security" | sort -u > /etc/apt/sources.list
 echo 5
 
 echo "### install proxy report in cron" >> $LOGFILE
-crontab /opt/nayaboh/config_files/crontab.sarg >> $LOGFILE
+crontab /opt/nayaboh/config_files/crontab.sarg &>> $LOGFILE
 echo 6
 
 
 echo "### restart network interfaces" >> $LOGFILE
-ifdown eth0 >> $LOGFILE
+ifdown eth0 &>> $LOGFILE
 echo 10
-ifdown eth1 >> $LOGFILE
+ifdown eth1 &>> $LOGFILE
 echo 15
-ifup eth0 >> $LOGFILE
+ifup eth0 &>> $LOGFILE
 echo 25
-ifup eth1 >> $LOGFILE
+ifup eth1 &>> $LOGFILE
 echo 30
 echo "### restart dnsmasq" >> $LOGFILE
-/etc/init.d/dnsmasq restart >> $LOGFILE
+/etc/init.d/dnsmasq restart &>> $LOGFILE
 echo 40
 echo "### start routing" >> $LOGFILE
-sysctl -p /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf &>> $LOGFILE
 echo 45
 echo "### restart squid" >> $LOGFILE
-/etc/init.d/squid restart >> $LOGFILE
+/etc/init.d/squid restart &>> $LOGFILE
 echo 60
 echo "### execute iptables in /etc/rc.local" >> $LOGFILE
-bash /etc/rc.local >> $LOGFILE
+bash /etc/rc.local &>> $LOGFILE
 echo 70
 echo "### update package database" >> $LOGFILE
-aptitude update >> $LOGFILE
+aptitude update &>> $LOGFILE
 echo 90
 echo "### initialise sarg statistics" >> $LOGFILE
-/usr/bin/sarg -g e -o /opt/nayaboh/proxy_stats
+/usr/bin/sarg -g e -o /opt/nayaboh/proxy_stats &>> $LOGFILE
 echo 100 ) | dialog --title "NaYaBoh setup" --gauge "Configuring and restarting services, this may take a wile..." 13 55
 
 echo "INSTALLATION FINISHED AT $(date +%Y-%m-%d_%H:%M:%S)" >> $LOGFILE
