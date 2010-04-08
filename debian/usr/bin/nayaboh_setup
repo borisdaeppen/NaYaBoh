@@ -51,6 +51,7 @@ echo 1
 
 echo "### configuring squid proxy" >> $LOGFILE
 cp -v /etc/squid/squid.conf /etc/squid/squid.conf_$BACKUP &>> $LOGFILE
+cat $(ls -1rt /etc/squid/squid.conf_BACKUP* | head -1) > /etc/squid/squid.conf # bring the oldest (original) back in place
 total_memory=$(free -m | grep Mem | awk '{print $2}')
 squid_memory=$(echo "$total_memory / 4" | bc)
 total_disk=$(df -m . | grep '/' | awk '{print $2}')
