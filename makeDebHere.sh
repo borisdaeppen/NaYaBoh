@@ -28,6 +28,10 @@ for i in $( find debian/opt/ debian/usr/ -type f ); do
         md5sum $i | sed -e "s/debian\///g" >> debian/DEBIAN/md5sums
 done
 
+# renew the size information
+sed -i '/Installed-Size/ d' debian/DEBIAN/control # delete
+echo "Installed-Size: $(du -s --exclude DEBIAN debian/ | cut -f1)" >> debian/DEBIAN/control
+
 # create deb package
 echo "build package"
 fakeroot dpkg-deb --build debian \
