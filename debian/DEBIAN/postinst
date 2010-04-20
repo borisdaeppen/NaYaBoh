@@ -1,0 +1,6 @@
+#!/bin/bash
+
+/usr/bin/nayaboh_setup
+
+exit 0
+
