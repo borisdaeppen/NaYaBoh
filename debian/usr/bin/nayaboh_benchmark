@@ -123,7 +123,7 @@ $graph->set_legend_font('GD::gdMediumBoldFont');
 $graph->set_legend('Direct', 'NaYaBoh');
 my $gd = $graph->plot( \@data ) or die $graph->error;
 
-open(IMG, '>file.png') or die $!;
+open(IMG, '>NaYaBoh_Benchmark.png') or die $!;
 binmode IMG;
 print IMG $gd->png;
 close IMG;
@@ -151,7 +151,7 @@ sub ask_nayaboh {
         $any_error = 0;
     }
 
-    my $status = `perl -e "BEGIN { \\\$ENV{HTTP_proxy}='http://192.168.0.1:3128' }; use LWP::Simple; print getstore ('http://$ip', 'bla');"`;
+    my $status = `perl -e "BEGIN { \\\$ENV{HTTP_proxy}='http://192.168.0.1:3128' }; use LWP::Simple; print getstore ('http://$ip', '/tmp/nayaboh_benchmark_$ip');"`;
 
     if (is_error($status)) { $any_error = 0; }
 
@@ -163,9 +163,42 @@ sub ask_internet {
     my $url = shift;
     my $any_error = 1;
 
-    my $status = getstore ("http://$url", $url);
+    my $status = getstore ("http://$url", "/tmp/nayaboh_benchmark_$url");
 
     if (is_error($status)) { $any_error = 0; }
 
     return $any_error;
 }
+
+# That is how it should be.
+# But I had problems with the request-method using IP
+# from: http://tomacorp.com/perl/lwp.html
+# 
+# #!/usr/bin/perl
+# 
+# use strict;
+# use LWP::UserAgent;
+# my $content;
+# 
+# my $ua = new LWP::UserAgent;
+# 
+# # Various enhancement possibilities:
+# # $ua->max_size(100000);  # 100k byte limit
+# # $ua->timeout(3);        # 3 sec timeout is default
+# # $ua->proxy(['http'], 'http://myproxy.mycorp.com/');  # set proxy
+# # $ua->env_proxy()        # load proxy info from environment variables
+# # $ua->no_proxy('localhost', 'mycorp.com');   # No proxy for local machines
+# 
+# $ua->agent("Mozilla/6.0");  # Or something equally mysterious
+# 
+# my $req = new HTTP::Request GET => 'http://mycorp.com/';
+# my $res = $ua->request($req);
+#  
+# if ($res->is_success) 
+# {
+#   $content= $res->content;
+# } 
+# else 
+# {
+#   die "Could not get content";
+# }
