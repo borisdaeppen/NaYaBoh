@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=Proxy Log View
 Comment=follow the logfile of squid
-Exec=sudo tail -f /var/log/squid/access.log
+Exec=/usr/bin/nayaboh_proxylog
 Icon=/opt/nayaboh/icon48.png
 Type=Application
 Categories=System;

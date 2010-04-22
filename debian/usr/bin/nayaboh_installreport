@@ -1,0 +1,4 @@
+#!/bin/sh
+
+dialog --title "NaYaBoh Installation Report" --textbox /opt/nayaboh/install.log 24 80
+
