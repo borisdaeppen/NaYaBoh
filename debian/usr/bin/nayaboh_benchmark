@@ -26,7 +26,6 @@
 use strict;
 use warnings;
 use Time::HiRes qw(time);
-use LWP::Simple;
 use GD::Graph::lines;   # uses libgd-graph-perl
 
 $| = 1; # disable print buffer of Perl
@@ -125,7 +124,6 @@ sub ask_nayaboh {
 
     my $url = shift;
 
-    #my $status = `perl -e "BEGIN { \\\$ENV{HTTP_proxy}='http://192.168.0.1:3128' }; use LWP::Simple; print getstore ('$url', '/tmp/nayaboh_benchmark_proxy_$base');"`;
     `export http_proxy=192.168.0.1:3128 && wget --page-requisites --no-check-certificate --delete-after --proxy=on $url`;
 }
 
@@ -133,7 +131,6 @@ sub ask_internet {
 
     my $url = shift;
 
-    #my $status = getstore ("http://$url", "/tmp/nayaboh_benchmark_$base");
     `wget --page-requisites --delete-after --no-check-certificate --no-proxy $url`;
 }
 
