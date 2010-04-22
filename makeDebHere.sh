@@ -23,7 +23,7 @@ rm nayaboh*.deb
 
 # update md5sums file of dep-tree
 echo "update md5sums file"
-echo '' > debian/DEBIAN/md5sums
+rm debian/DEBIAN/md5sums
 for i in $( find debian/opt/ debian/usr/ -type f ); do
         md5sum $i | sed -e "s/debian\///g" >> debian/DEBIAN/md5sums
 done
