@@ -89,7 +89,7 @@ for (my $i=1;$i<=$rounds;$i++) {
 my $graph = GD::Graph::lines->new(800, 400);
 
 $graph->set( 
-    x_label           => "$rounds Rounds",
+    x_label           => "$rounds x requested: " . join(',', @pages),
     y_label           => 'Time',
     title             => 'Benchmark',
     y_max_value       => (int(($highest+4)/5)*5), # e.g: 23 -> 25
