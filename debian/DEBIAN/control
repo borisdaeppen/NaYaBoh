@@ -3,7 +3,7 @@ Version: 0.3
 Section: utils
 Priority: extra
 Architecture: all
-Depends: bash (>= 3.2), dnsmasq, squid, adzapper, iptables, sarg, dialog, wget, libgd-graph-perl, netstat-nat
+Depends: bash (>= 3.2), dnsmasq, squid, adzapper, iptables, sarg, dialog, sudo, wget, libgd-graph-perl, netstat-nat
 Suggests: gkrellm
 Maintainer: Boris Däppen <boris_daeppen@bluewin.ch>
 Description: Set up a very simple internet server.
