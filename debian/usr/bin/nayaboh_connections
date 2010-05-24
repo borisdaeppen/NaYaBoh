@@ -1,8 +1,14 @@
 #!/bin/sh
 
-sudo echo 'This Computers are now connected to NaYaBoh.'
-sudo netstat-nat -n | awk '{ print $2 }' | cut -d: -f1 | sort -u | grep -v NATed
-echo ""
+sudo netstat-nat -n > /tmp/nayaboh_netstat
+
+echo 'This Computers are now connected to NaYaBoh.'
+cat /tmp/nayaboh_netstat | awk '{ print $2 }' | cut -d: -f1 | sort -u | grep -v NATed
+echo '' 
+echo 'Number of open connections handled by NaYaBoh:'
+wc -l /tmp/nayaboh_netstat | awk '{ print $1 }'
+echo ''
+
 echo "Window will close in 30 seconds."
 sleep 30
 
