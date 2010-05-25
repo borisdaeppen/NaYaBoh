@@ -37,6 +37,7 @@ if (not exists $ARGV[0]) {
 }
 elsif ($ARGV[0] =~ /-h/) {
     print "\nUse this program only if you know what you do.\nFor documentation see the source code.\n\nThis program downloads some web pages and calculates the time consumed.\n\n";
+    print "\nEXAMPLES:\n\n\tnayaboh_benchmark 2      # run with 2 cycles\n\tnayaboh_benchmark 2 -s   # same but sort the output\n\n";
     exit 1;
 }
 elsif ($ARGV[0] =~ /[^0-9]/) {
@@ -97,12 +98,18 @@ $graph->set(
     #y_label_skip      => 1 
 ) or die $graph->error;
 
-my @sorted_time_proxy = sort {$a <=> $b } @time_proxy;
-my @sorted_time_noproxy = sort {$a <=> $b } @time_noproxy;
+# if there is any second argument, preferable (-s)
+# the values should be sorted
+if (exists $ARGV[1]) {
+    my @sorted_time_proxy   = sort {$a <=> $b } @time_proxy;
+    my @sorted_time_noproxy = sort {$a <=> $b } @time_noproxy;
+    @time_proxy   = @sorted_time_proxy;
+    @time_noproxy = @sorted_time_noproxy;
+}
 
 my @data = (    [1 .. ($rounds * scalar @pages)],
-                \@sorted_time_noproxy,
-                \@sorted_time_proxy );
+                \@time_noproxy,
+                \@time_proxy );
 
 #use Data::Dumper;
 #print Dumper(\@data);
