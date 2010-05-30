@@ -134,28 +134,16 @@ sub ask_nayaboh {
 
     my $url = shift;
 
-    `export http_proxy=192.168.111.1:3128 && wget --page-requisites --no-check-certificate --delete-after --proxy=on $url`;
+    `export http_proxy=192.168.111.1:3128 && wget --page-requisites --no-check-certificate --delete-after --directory-prefix /tmp/NaYaBoh --proxy=on $url`;
 }
 
 sub ask_internet {
 
     my $url = shift;
 
-    `wget --page-requisites --delete-after --no-check-certificate --no-proxy $url`;
+    `wget --page-requisites --delete-after --no-check-certificate --directory-prefix /tmp/NaYaBoh --no-proxy $url`;
+
 }
-
-sub base_url {
-
-    my $url = shift;
-
-    if ($url =~ /\/\/([^\/]*)/) {
-        return $1;
-    }
-    else {
-        return 0;
-    }
-}
-
 
 
 # That is how it should be.
