@@ -134,7 +134,7 @@ sub ask_nayaboh {
 
     my $url = shift;
 
-    `export http_proxy=192.168.0.1:3128 && wget --page-requisites --no-check-certificate --delete-after --proxy=on $url`;
+    `export http_proxy=192.168.111.1:3128 && wget --page-requisites --no-check-certificate --delete-after --proxy=on $url`;
 }
 
 sub ask_internet {
