@@ -1,27 +1,29 @@
 #!/bin/sh
 
+NEW=$1
+
 if test ! $1
     then
-    # error: wrong argument
-    echo 'Give the 3 first numbers of an IP as argument.'
-    echo 'This will change the NaYaBoh configuration.'
-    echo ''
-    echo 'EXAMPLE: nayaboh_ipconfig 192.168.23'
-    echo ''
-    exit 1
+    echo 'Enter the first three numbers of your network of choice.'
+    echo 'I mean the X in this example -> X.X.X.Z'
+    echo -n "Enter your IP and press [ENTER]: "
+    read NEW
 fi
 
 NET=$(grep network /etc/network/interfaces | awk '{ print $2 }' | cut -d. -f4 --complement)
-echo "try to change '$NET' to '$1' in this files:"
+echo "try to change '$NET' to '$NEW' in this files:"
 echo "/usr/bin/nayaboh_benchmark /etc/squid/squid.conf /etc/network/interfaces /etc/dnsmasq.conf"
-sudo sed -i "s/$NET/$1/g" /usr/bin/nayaboh_benchmark /etc/network/interfaces /etc/dnsmasq.conf
+sudo sed -i "s/$NET/$NEW/g" /usr/bin/nayaboh_benchmark /etc/network/interfaces /etc/dnsmasq.conf
 sudo sed -i '/nayaboh src/ d' /etc/squid/squid.conf # delete
-sudo sed -i "3iacl nayaboh src $1.0/255.255.255.0" /etc/squid/squid.conf
+sudo sed -i "3iacl nayaboh src $NEW.0/255.255.255.0" /etc/squid/squid.conf
 echo ''
 echo 'Changes took effect here:'
-sudo grep -F $1 /usr/bin/nayaboh_benchmark /etc/squid/squid.conf /etc/network/interfaces /etc/dnsmasq.conf
+sudo grep -F $NEW /usr/bin/nayaboh_benchmark /etc/squid/squid.conf /etc/network/interfaces /etc/dnsmasq.conf
 echo ''
 echo "Please reboot the computer so that changes take effect."
 echo "(you can also restart squid, dnsmasq and networking manualy)"
+
+echo "Window will close in 30 seconds."
+sleep 30
 
 exit 0
