@@ -6,6 +6,7 @@ a1d30533bcb72869d9e8df79d3604a20  opt/nayaboh/config_files/etc_rc.local
 30a65d7285c9919ba6038d456c524518  usr/share/applications/nayaboh_installreport.desktop
 f99c22623e99a60876c2db2bfbc0eee8  usr/share/applications/nayaboh_proxyview.desktop
 34d22d331f2f6626af0b58b4daa056bb  usr/share/applications/nayaboh_benchmark.desktop
+19c958c23773b2bae7d6a785128223ec  usr/share/applications/nayaboh_ipconfig.desktop
 3e3d9cd2268fb61cb5dbe30885374c76  usr/share/applications/nayaboh_connections.desktop
 52c208f4c591ecc1b54219b6233514ab  usr/share/applications/nayaboh_proxystats.desktop
 36c5447412ff9b2b884d9937101fea11  usr/bin/nayaboh_proxylog
@@ -14,3 +15,4 @@ f99c22623e99a60876c2db2bfbc0eee8  usr/share/applications/nayaboh_proxyview.deskt
 f415f608804a7453107b7a825ed406bb  usr/bin/nayaboh_setup
 582c9f2bb6602d1f70aad958291e5612  usr/bin/nayaboh_connections
 1d534a4a45da0b4db72b787adcb0562c  usr/bin/nayaboh_benchmark
+feab277ec59927ec60d325597ef29075  usr/bin/nayaboh_ipconfig
