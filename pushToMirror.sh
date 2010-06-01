@@ -6,7 +6,7 @@
 # create a directory gna.org, checkout trunk and website,
 # then run this to push the latest git code to Gna!
 
-cp -rv COPYING debian documentation makeDebHere.sh README gna.org/nayaboh
+cp -rv COPYING debian documentation makeDebHere.sh pushToMirror.sh README gna.org/nayaboh
 cd gna.org/nayaboh
 svn add *
 svn commit
