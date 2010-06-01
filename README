@@ -1,8 +1,9 @@
 NaYaBoh is an “Internet Proxy Server”, especially designed to enhance Internet access in developing countries.
 
 Tested only with this operating systems (desktop and server version):
- * ubuntu 9.04
+ * Ubuntu 9.04
  * Ubuntu 9.10
+ * Ubuntu 10.04
  * Debian 5 "lenny"
 
 Please notice that there may be critical bugs and issues.
