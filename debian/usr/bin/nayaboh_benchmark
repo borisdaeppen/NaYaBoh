@@ -124,7 +124,7 @@ print IMG $gd->png;
 close IMG;
 
 # try to display picture, or give message
-`firefox NaYaBoh_Benchmark.png || iceweasel NaYaBoh_Benchmark.png || epiphany NaYaBoh_Benchmark.png || echo '### SEE PICTURE ~/NaYaBoh_Benchmark.png'`;
+`firefox NaYaBoh_Benchmark.png || iceweasel NaYaBoh_Benchmark.png || epiphany NaYaBoh_Benchmark.png || echo '### SEE PICTURE ./NaYaBoh_Benchmark.png'`;
 
 
 
