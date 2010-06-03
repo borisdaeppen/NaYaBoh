@@ -94,6 +94,7 @@ $graph->set(
     y_label           => 'Time',
     title             => 'Benchmark',
     y_max_value       => (int(($highest+4)/5)*5), # e.g: 23 -> 25
+    line_width        => 2,
     #y_tick_number     => 1,
     #y_label_skip      => 1 
 ) or die $graph->error;
