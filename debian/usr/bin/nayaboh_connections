@@ -9,6 +9,3 @@ echo 'Number of open connections handled by NaYaBoh:'
 wc -l /tmp/nayaboh_netstat | awk '{ print $1 }'
 echo ''
 
-echo "Window will close in 30 seconds."
-sleep 30
-

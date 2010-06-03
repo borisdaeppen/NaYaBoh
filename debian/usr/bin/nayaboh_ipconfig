@@ -23,7 +23,4 @@ echo ''
 echo "Please reboot the computer so that changes take effect."
 echo "(you can also restart squid, dnsmasq and networking manualy)"
 
-echo "Window will close in 30 seconds."
-sleep 30
-
 exit 0
