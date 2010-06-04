@@ -1,11 +1,73 @@
-#!/bin/sh
+#!/usr/bin/perl
 
-sudo netstat-nat -n > /tmp/nayaboh_netstat
+# Copyright 2010 Boris Daeppen <boris_daeppen@bluewin.ch>
+# 
+# This file is part of NaYaBoh.
+# 
+# NaYaBoh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# NaYaBoh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with orgcreator.  If not, see <http://www.gnu.org/licenses/>.
 
-echo 'This Computers are now connected to NaYaBoh.'
-cat /tmp/nayaboh_netstat | awk '{ print $2 }' | cut -d: -f1 | sort -u | grep -v NATed
-echo '' 
-echo 'Number of open connections handled by NaYaBoh:'
-wc -l /tmp/nayaboh_netstat | awk '{ print $1 }'
-echo ''
+
+######################################
+# NaYaBoh Connections                #
+# *******************                #
+# this program shows you a statistic #
+# of all open internet connections   #
+# at the NaYaBoh server              #
+######################################
+
+my @netstat = `sudo netstat-nat -n`;
+my %connection;
+
+# fetch the connection data
+my $ctrl_orig = 0;
+my $ctrl_grep = 0;
+for (my $i=1;$i < scalar @netstat;$i++) {
+    $ctrl_orig++;
+
+    # process the data
+    if ($netstat[$i] =~ m/(^\w*)\s*(\S*)\s*(\S*)\s*(\w*)/) {
+        $ctrl_grep++;
+
+        my $Proto               = $1;
+        my $NATed_Address       = $2;
+        my $Destination_Address = $3;
+        my $State               = $4;
+
+        # extract the IP address
+        my ($ip,$port) = split(':', $NATed_Address);
+
+        # count the occurence per IP
+        if (exists $connection{$ip}) {
+            $connection{$ip}++;
+        }
+        else {
+            $connection{$ip} = 1;
+        }
+
+    }
+}
+
+# check if the pattern match has reached everything
+unless ($ctrl_orig == $ctrl_grep) {
+    print "WARNING: there is something wrong in the program, don't trust the result.\n";
+    print "You may report this to the developer.\n";
+}
+
+# print out the statistic
+print "\nWorkstation IP\tConnections open\n";
+while (my ($ip,$count) = each %connection) {
+    print "$ip\t$count\n";
+}
+print "\nTotal connections open: $ctrl_grep\n\n"
 
