@@ -13,7 +13,7 @@ f99c22623e99a60876c2db2bfbc0eee8  usr/share/applications/nayaboh_proxyview.deskt
 36c5447412ff9b2b884d9937101fea11  usr/bin/nayaboh_proxylog
 0d9a83d4c68efdd02e53fa9ef645aa4f  usr/bin/nayaboh_installreport
 6b20d73867530d668372e65f35829d26  usr/bin/nayaboh_proxy_statistics
-e2f3b1f709591ee6ac3a56fb7b862d66  usr/bin/nayaboh_setup
+08886dba983d9be139f42f8e52752d48  usr/bin/nayaboh_setup
 7a8a17bdaa9106059995e8f67477c7a4  usr/bin/nayaboh_connections
 b54ab124bb1c06acb15964aca1a29459  usr/bin/nayaboh_benchmark
 d39bf06cb7fe3eb3ed2508d79ebb023b  usr/bin/nayaboh_ipconfig

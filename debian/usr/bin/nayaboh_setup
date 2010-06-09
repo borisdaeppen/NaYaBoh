@@ -40,8 +40,8 @@ total_memory=$(free -m | grep Mem | awk '{print $2}')
 squid_memory=$(echo "$total_memory / 4" | bc)
 total_disk=$(df -m /var/spool/squid | grep '/' | awk '{print $4}')
 squid_disk=$(echo "$total_disk / 2" | bc)
-echo "squid_disk=$squid_disk MB" > $LOGFILE
-echo "squid_memory=$squid_memory MB" > $LOGFILE
+echo "squid_disk=$squid_disk MB" >> $LOGFILE
+echo "squid_memory=$squid_memory MB" >> $LOGFILE
 
 #add nayaboh config to beginning of squif.conf because acl deny in the middle of conf file
 sed -i "1icache_dir ufs /var/spool/squid $squid_disk 16 256" /etc/squid/squid.conf
