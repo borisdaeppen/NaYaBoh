@@ -38,8 +38,10 @@ cp -v /etc/squid/squid.conf /etc/squid/squid.conf_$BACKUP 2>&1 >> $LOGFILE
 cat $(ls -1rt /etc/squid/squid.conf_BACKUP* | head -1) > /etc/squid/squid.conf # bring the oldest (original) back in place
 total_memory=$(free -m | grep Mem | awk '{print $2}')
 squid_memory=$(echo "$total_memory / 4" | bc)
-total_disk=$(df -m . | grep '/' | awk '{print $2}')
-squid_disk=$(echo "$total_disk / 10" | bc)
+total_disk=$(df -m /var/spool/squid | grep '/' | awk '{print $4}')
+squid_disk=$(echo "$total_disk / 2" | bc)
+echo "squid_disk=$squid_disk MB" > $LOGFILE
+echo "squid_memory=$squid_memory MB" > $LOGFILE
 
 #add nayaboh config to beginning of squif.conf because acl deny in the middle of conf file
 sed -i "1icache_dir ufs /var/spool/squid $squid_disk 16 256" /etc/squid/squid.conf
@@ -48,6 +50,8 @@ sed -i "3iacl nayaboh src 192.168.111.0/255.255.255.0" /etc/squid/squid.conf
 sed -i "4ihttp_access allow nayaboh" /etc/squid/squid.conf
 sed -i "5ihttp_port 3128 transparent" /etc/squid/squid.conf
 sed -i "6iredirect_program /usr/bin/adzapper.wrapper" /etc/squid/squid.conf
+# squid_disk is actually in MB, by treating it as KB I devide it by 1000
+sed -i "7imaximum_object_size $squid_disk KB" /etc/squid/squid.conf
 echo 2
 
 echo "### configuring dns and dhcp" 2>&1 >> $LOGFILE
