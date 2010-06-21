@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Proxy Connections
-Comment=See the Computers connected to NaYaBoh
+Name=NaYaBoh Connections
+Comment=list the computers connected to the Internet
 Terminal=true
 Exec=bash -c "/usr/bin/nayaboh_connections ; bash"
 Icon=/opt/nayaboh/icon48.png

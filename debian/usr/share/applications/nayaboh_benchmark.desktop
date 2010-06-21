@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=NaYaBoh Benchmark
-Comment=Measure the efficiency of NaYaBoh
+Comment=measure the efficiency of NaYaBoh, live
 Terminal=true
 Exec=sudo /usr/bin/nayaboh_benchmark 2
 Icon=/opt/nayaboh/icon48.png

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Proxy Log View
-Comment=follow the logfile of squid
+Name=NaYaBoh Live-Log
+Comment=see the internet requests live
 Exec=/usr/bin/nayaboh_proxylog
 Icon=/opt/nayaboh/icon48.png
 Type=Application

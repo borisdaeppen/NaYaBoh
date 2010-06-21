@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=IP config
-Comment=Change the internal IP network
+Name=NaYaBoh Network
+Comment=change the internal IP network
 Terminal=true
 Exec=bash -c "/usr/bin/nayaboh_ipconfig ; bash"
 Icon=/opt/nayaboh/icon48.png
