@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# list all rules in the FOREWARD chain
+sudo iptables -n -L FORWARD --line-numbers
+
+echo ""
+echo "See the above list for blocked IP addresses"
+echo ""
+
+echo -n "block or unblock IP?: [b/u] "
+read OPT
+
+if [ $OPT == 'b' ]
+    then
+
+    echo -n "Enter IP to block: "
+    read IP
+
+    # block the IP
+    sudo iptables -A FORWARD -i eth1 -s $IP -j DROP
+elif [ $OPT == 'u' ]
+    then
+
+    echo -n "Enter rule number (first col.) to unblock: "
+    read NUM
+
+    sudo iptables -D FORWARD $NUM
+else
+    echo "ERROR: wrong argument"
+    exit 1
+fi
+
+echo ""
+
+# list all rules in the FOREWARD chain
+sudo iptables -n -L FORWARD --line-numbers
+
+echo ""
+echo "Job done, see the above list for the current blocked IP addresses."
+echo ""
+
