@@ -119,6 +119,22 @@ $graph->set_legend_font('GD::gdMediumBoldFont');
 $graph->set_legend('Direct', 'NaYaBoh');
 my $gd = $graph->plot( \@data ) or die $graph->error;
 
+# add some additional information to the chart
+my $date   = `date`;
+my $uptime = `uptime | cut -d, -f1 | cut -d' ' -f1-3 --complement`;
+my $RX     = `ifconfig eth0 | grep 'RX bytes' | cut -d: -f2 | cut -d')' -f1 | cut -d'(' -f2`;
+my $TX     = `ifconfig eth1 | grep 'TX bytes' | cut -d: -f3 | cut -d')' -f1 | cut -d'(' -f2`;
+chomp ($date);
+chomp ($uptime);
+chomp ($RX);
+chomp ($TX);
+use GD;
+$gd->string(gdSmallFont,60,40,$date,1);
+$gd->string(gdSmallFont,60,60,"$uptime uptime",1);
+$gd->string(gdSmallFont,60,80,"$RX Internet received",1);
+$gd->string(gdSmallFont,60,100,"$TX internal transmitted",1);
+
+# print the chart to file
 open(IMG, '>NaYaBoh_Benchmark.png') or die $!;
 binmode IMG;
 print IMG $gd->png;
