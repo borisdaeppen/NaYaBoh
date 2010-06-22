@@ -89,10 +89,13 @@ for (my $i=1;$i<=$rounds;$i++) {
 
 my $graph = GD::Graph::lines->new(800, 400);
 
+my $hostname = `uname -n`;
+chomp ($hostname);
+
 $graph->set( 
     x_label           => "$rounds x requested: " . join(',', @pages),
     y_label           => 'Time',
-    title             => 'Benchmark',
+    title             => "Benchmark on $hostname",
     y_max_value       => (int(($highest+4)/5)*5), # e.g: 23 -> 25
     line_width        => 2,
     #y_tick_number     => 1,
@@ -131,8 +134,8 @@ chomp ($TX);
 use GD;
 $gd->string(gdSmallFont,60,40,$date,1);
 $gd->string(gdSmallFont,60,60,"$uptime uptime",1);
-$gd->string(gdSmallFont,60,80,"$RX Internet received",1);
-$gd->string(gdSmallFont,60,100,"$TX internal transmitted",1);
+$gd->string(gdSmallFont,60,80,"$RX from Internet",1);
+$gd->string(gdSmallFont,60,100,"$TX to Clients",1);
 
 # print the chart to file
 open(IMG, '>NaYaBoh_Benchmark.png') or die $!;
