@@ -90,7 +90,29 @@ echo "### start routing" 2>&1 >> $LOGFILE
 sysctl -p /etc/sysctl.conf 2>&1 >> $LOGFILE
 echo 45
 echo "### restart squid" 2>&1 >> $LOGFILE
-/etc/init.d/squid restart 2>&1 >> $LOGFILE
+# because on ubuntu 10.04 squid is using upstart for squid
+# but debian does not I need to find out which system is used
+if which initctl && initctl --version | grep -i upstart
+    then
+    echo "upstart installed, try use upstart..." 2>&1 >> $LOGFILE
+    echo "stopping squid..." 2>&1 >> $LOGFILE
+    initctl stop squid 2>&1 >> $LOGFILE
+    echo 50
+    sleep 5
+    while ps aux | grep squid | grep -v grep
+    do
+        echo "squid is still up, waiting 3 seconds..." 2>&1 >> $LOGFILE
+        sleep 3
+    done
+    echo 55
+    echo 'squid is down!' 2>&1 >> $LOGFILE
+    sleep 1
+    echo "starting squid..." 2>&1 >> $LOGFILE
+    initctl start squid 2>&1 >> $LOGFILE
+else
+    echo "no upstart installed, try use init script..." 2>&1 >> $LOGFILE
+    /etc/init.d/squid restart 2>&1 >> $LOGFILE
+fi
 echo 60
 echo "### execute iptables in /etc/rc.local" 2>&1 >> $LOGFILE
 bash /etc/rc.local 2>&1 >> $LOGFILE
