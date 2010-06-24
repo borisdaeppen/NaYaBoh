@@ -20,7 +20,35 @@ echo ''
 echo 'Changes took effect here:'
 sudo grep -F $NEW /usr/bin/nayaboh_benchmark /etc/squid/squid.conf /etc/network/interfaces /etc/dnsmasq.conf
 echo ''
-echo "Please reboot the computer so that changes take effect."
-echo "(you can also restart squid, dnsmasq and networking manualy)"
+
+echo "### restart network interfaces"
+ifdown eth0
+ifdown eth1
+ifup eth0
+ifup eth1
+echo "### restart dnsmasq"
+/etc/init.d/dnsmasq restart
+echo "### restart squid"
+# because ubuntu 10.04 is using upstart for squid
+# but debian does not I need to find out which system is used
+if which initctl && initctl --version | grep -i upstart
+    then
+    echo "upstart installed, try use upstart..."
+    echo "stopping squid..."
+    initctl stop squid
+    sleep 5
+    while ps aux | grep squid | grep -v grep
+    do
+        echo "squid is still up, waiting 3 seconds..."
+        sleep 3
+    done
+    echo 'squid is down!'
+    sleep 1
+    echo "starting squid..."
+    initctl start squid
+else
+    echo "no upstart installed, try use init script..."
+    /etc/init.d/squid restart
+fi
 
 exit 0
