@@ -90,7 +90,7 @@ echo "### start routing" 2>&1 >> $LOGFILE
 sysctl -p /etc/sysctl.conf 2>&1 >> $LOGFILE
 echo 45
 echo "### restart squid" 2>&1 >> $LOGFILE
-# because on ubuntu 10.04 squid is using upstart for squid
+# because ubuntu 10.04 is using upstart for squid
 # but debian does not I need to find out which system is used
 if which initctl && initctl --version | grep -i upstart
     then
