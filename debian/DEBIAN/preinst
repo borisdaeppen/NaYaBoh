@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo '### STOPPING SQUID'
+if which initctl && initctl --version | grep -i upstart
+    then
+    echo "upstart installed, try use upstart..."
+    echo "stopping squid..."
+    initctl stop squid
+    sleep 5
+    while ps aux | grep squid | grep -v grep
+    do
+        echo "squid is still up, waiting 3 seconds..."
+        sleep 3
+    done
+    echo 'squid is down!'
+else
+    echo "no upstart installed, try use init script..."
+    /etc/init.d/squid stop
+fi
+
+echo '### STOPPING DNSMASQ'
+/etc/init.d/dnsmasq stop
+
+
+exit 0
+
+
