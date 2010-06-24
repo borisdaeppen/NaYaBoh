@@ -22,12 +22,12 @@ sudo grep -F $NEW /usr/bin/nayaboh_benchmark /etc/squid/squid.conf /etc/network/
 echo ''
 
 echo "### restart network interfaces"
-ifdown eth0
-ifdown eth1
-ifup eth0
-ifup eth1
+sudo ifdown eth0
+sudo ifdown eth1
+sudo ifup eth0
+sudo ifup eth1
 echo "### restart dnsmasq"
-/etc/init.d/dnsmasq restart
+sudo /etc/init.d/dnsmasq restart
 echo "### restart squid"
 # because ubuntu 10.04 is using upstart for squid
 # but debian does not I need to find out which system is used
@@ -35,7 +35,7 @@ if which initctl && initctl --version | grep -i upstart
     then
     echo "upstart installed, try use upstart..."
     echo "stopping squid..."
-    initctl stop squid
+    sudo initctl stop squid
     sleep 5
     while ps aux | grep squid | grep -v grep
     do
@@ -45,10 +45,10 @@ if which initctl && initctl --version | grep -i upstart
     echo 'squid is down!'
     sleep 1
     echo "starting squid..."
-    initctl start squid
+    sudo initctl start squid
 else
     echo "no upstart installed, try use init script..."
-    /etc/init.d/squid restart
+    sudo /etc/init.d/squid restart
 fi
 
 exit 0
