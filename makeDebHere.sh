@@ -21,6 +21,10 @@
 # remove old packages
 rm nayaboh*.deb
 
+# pack manpage
+cp documentation/manpage/nayaboh*.1 debian/usr/share/man/man1/
+gzip --best debian/usr/share/man/man1/nayaboh*.1
+
 # update md5sums file of dep-tree
 echo "update md5sums file"
 rm debian/DEBIAN/md5sums
@@ -39,4 +43,8 @@ $( grep Package debian/DEBIAN/control | cut -d" " -f2 )_\
 $( grep Version debian/DEBIAN/control | cut -d" " -f2 )_\
 $( grep Architecture debian/DEBIAN/control | cut -d" " -f2 )\
 .deb
+
+# remove packed manpage,
+# I don't need it in src
+rm debian/usr/share/man/man1/nayaboh*.1.gz
 
