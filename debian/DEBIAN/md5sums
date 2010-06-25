@@ -1,9 +1,9 @@
-c9ef88b60ab2b41d99a88c3b54dcedf9  opt/nayaboh/ORIGINAL_Ubuntu-9.04_usr_share_icons_Human_48x48_categories_applications-internet.png
 34eb4f54261da2249c6bbd2f1c5187cf  opt/nayaboh/icon48.png
 f98294b221af6fce6842f1d636f83abf  opt/nayaboh/config_files/etc_dnsmasq.conf
 a1d30533bcb72869d9e8df79d3604a20  opt/nayaboh/config_files/etc_rc.local
 7b37abd4f1a4318b54a2a9fcd0b40b34  opt/nayaboh/config_files/crontab.sarg
 35bbee73549a75ae2b5dc6104319d53a  opt/nayaboh/config_files/etc_network_interfaces
+02ffcb54af02fa68e6050abbc1f1bdd1  usr/share/doc/nayaboh/copyright
 7769ba86060e1201ca62e528735a9661  usr/share/applications/nayaboh_installreport.desktop
 65349cd5d8a2a109b711b02bc7e984dd  usr/share/applications/nayaboh_firewall.desktop
 77644edd8d5b886aebe2cbcb4fa26d83  usr/share/applications/nayaboh_proxyview.desktop
@@ -11,6 +11,15 @@ a1d30533bcb72869d9e8df79d3604a20  opt/nayaboh/config_files/etc_rc.local
 f080ec28b13957880863100b289869ba  usr/share/applications/nayaboh_ipconfig.desktop
 b8e8f6f2b160369a357e24c6f2f2a12c  usr/share/applications/nayaboh_connections.desktop
 a41eb5e990167ea9d4c36c368ae5e5e1  usr/share/applications/nayaboh_proxystats.desktop
+da911307bed902da274f54ad5b834895  usr/share/man/man1/nayaboh_benchmark.1.gz
+b7b08b2f86b23cacdedc717be1e29e7b  usr/share/man/man1/nayaboh_proxy_statistics.1.gz
+a0949aabab44402eef1824d15805fb08  usr/share/man/man1/nayaboh_connections.1.gz
+00e4d337662ce714f22f4fbe35da43c0  usr/share/man/man1/nayaboh_setup.1.gz
+a625bbb7082703da998db5f072f84aec  usr/share/man/man1/nayaboh_firewall.1.gz
+2efc8ddb3737afa43cbc370e8aa35960  usr/share/man/man1/nayaboh_installreport.1.gz
+fa88eea74d6da0781e69864d08a481d8  usr/share/man/man1/nayaboh_ipconfig.1.gz
+8aa441083f43fb75b867a64d6775713e  usr/share/man/man1/nayaboh.1.gz
+b6a836cee40832da6068810cc24a2a0b  usr/share/man/man1/nayaboh_proxylog.1.gz
 0564407307308eb521cb6014a2eeea79  usr/bin/nayaboh_firewall
 36c5447412ff9b2b884d9937101fea11  usr/bin/nayaboh_proxylog
 0d9a83d4c68efdd02e53fa9ef645aa4f  usr/bin/nayaboh_installreport
