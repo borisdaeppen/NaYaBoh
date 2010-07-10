@@ -1,0 +1,6 @@
+nayaboh (1.4-5) unstable; urgency=low
+
+ * Debian maintainer and upstream author are identical.
+ * Therefore see also normal changelog file for Debian changes.
+
+ -- Boris Daeppen <boris_daeppen@bluewin.ch> 2010-07-10

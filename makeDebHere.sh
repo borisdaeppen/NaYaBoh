@@ -25,6 +25,12 @@ rm nayaboh*.deb
 cp documentation/manpage/nayaboh*.1 debian/usr/share/man/man1/
 gzip --best debian/usr/share/man/man1/nayaboh*.1
 
+#pack changelog
+cp changelog debian/usr/share/doc/nayaboh/
+cp changelog.Debian debian/usr/share/doc/nayaboh/
+gzip --best debian/usr/share/doc/nayaboh/changelog
+gzip --best debian/usr/share/doc/nayaboh/changelog.Debian
+
 # update md5sums file of dep-tree
 echo "update md5sums file"
 rm debian/DEBIAN/md5sums
@@ -44,7 +50,9 @@ $( grep Version debian/DEBIAN/control | cut -d" " -f2 )_\
 $( grep Architecture debian/DEBIAN/control | cut -d" " -f2 )\
 .deb
 
-# remove packed manpage,
+# remove packed things,
 # I don't need it in src
 rm debian/usr/share/man/man1/nayaboh*.1.gz
+rm debian/usr/share/doc/nayaboh/changelog.gz
+rm debian/usr/share/doc/nayaboh/changelog.Debian.gz
 
