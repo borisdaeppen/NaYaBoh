@@ -131,6 +131,4 @@ echo "### update package database" 2>&1 >> $LOGFILE
 aptitude update 2>&1 >> $LOGFILE
 
 echo "INSTALLATION FINISHED AT $(date +%Y-%m-%d_%H:%M:%S)" 2>&1 >> $LOGFILE
-dialog --title "NaYaBoh setup" \
-        --infobox "Installation finished." 13 45
 
