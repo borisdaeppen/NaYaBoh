@@ -34,7 +34,7 @@ gzip --best debian/usr/share/doc/nayaboh/changelog.Debian
 # update md5sums file of dep-tree
 echo "update md5sums file"
 rm debian/DEBIAN/md5sums
-for i in $( find debian/opt/ debian/usr/ -type f ); do
+for i in $( find debian/usr/ -type f ); do
         md5sum $i | sed -e "s/debian\///g" >> debian/DEBIAN/md5sums
 done
 
