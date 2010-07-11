@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # list all rules in the FOREWARD chain
-sudo iptables -n -L FORWARD --line-numbers
+sudo iptables -n -L FORWARD --line-numbers | tail -n +2
+# only show one chain, easier to read
+#sudo iptables -n -L INPUT   --line-numbers
+# list all rules in the FOREWARD chain
 
 echo ""
 echo "See the above list for blocked IP addresses"
@@ -18,6 +21,7 @@ if [ $OPT == 'b' ]
 
     # block the IP
     sudo iptables -A FORWARD -i eth1 -s $IP -j DROP
+    sudo iptables -A INPUT   -i eth1 -s $IP -j DROP
 elif [ $OPT == 'u' ]
     then
 
@@ -25,6 +29,7 @@ elif [ $OPT == 'u' ]
     read NUM
 
     sudo iptables -D FORWARD $NUM
+    sudo iptables -D INPUT   $NUM
 else
     echo "ERROR: wrong argument"
     exit 1
@@ -33,7 +38,9 @@ fi
 echo ""
 
 # list all rules in the FOREWARD chain
-sudo iptables -n -L FORWARD --line-numbers
+sudo iptables -n -L FORWARD --line-numbers | tail -n +2
+# only show one chain, easier to read
+#sudo iptables -n -L INPUT   --line-numbers
 
 echo ""
 echo "Job done, see the above list for the current blocked IP addresses."
