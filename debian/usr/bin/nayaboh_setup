@@ -20,7 +20,9 @@
 
 TIMESTAMP=$(date +%Y-%m-%d_%H:%M:%S)
 BACKUP=BACKUP_$TIMESTAMP
-LOGFILE='/opt/nayaboh/install.log'
+LOGFILE='/var/log/nayaboh/install.log'
+
+mkdir /var/log/nayaboh
 
 echo "" > $LOGFILE
 echo "INSTALLATION OF NaYaBoh AT $TIMESTAMP" 2>&1 >> $LOGFILE
@@ -29,7 +31,18 @@ echo "" >> $LOGFILE
 
 echo "### configuring routing" 2>&1 >> $LOGFILE
 cp -v /etc/rc.local /etc/rc.local_$BACKUP 2>&1 >> $LOGFILE
-cp -v /opt/nayaboh/config_files/etc_rc.local /etc/rc.local 2>&1 >> $LOGFILE
+echo '#!/bin/sh -e
+# THIS SCRIPT WAS ALTERED BY NAYABOH
+
+# internet gateway routing
+/sbin/iptables -P FORWARD ACCEPT
+/sbin/iptables --table nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+# proxy trancparency
+iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 80 -j REDIRECT --to-port 3128
+
+exit 0
+' > /etc/rc.local
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 
 echo "### configuring squid proxy" 2>&1 >> $LOGFILE
@@ -42,7 +55,7 @@ squid_disk=$(echo "$total_disk / 2" | bc)
 echo "squid_disk=$squid_disk MB" >> $LOGFILE
 echo "squid_memory=$squid_memory MB" >> $LOGFILE
 
-#add nayaboh config to beginning of squif.conf because acl deny in the middle of conf file
+#add nayaboh config to beginning of squid.conf because acl deny in the middle of conf file
 sed -i "1icache_dir ufs /var/spool/squid $squid_disk 16 256" /etc/squid/squid.conf
 sed -i "2icache_mem $squid_memory MB" /etc/squid/squid.conf
 sed -i "3iacl nayaboh src 192.168.111.0/255.255.255.0" /etc/squid/squid.conf
@@ -54,19 +67,32 @@ sed -i "7imaximum_object_size $squid_disk KB" /etc/squid/squid.conf
 
 echo "### configuring dns and dhcp" 2>&1 >> $LOGFILE
 cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf_$BACKUP 2>&1 >> $LOGFILE
-cp -v /opt/nayaboh/config_files/etc_dnsmasq.conf /etc/dnsmasq.conf 2>&1 >> $LOGFILE
+echo 'bogus-priv
+dhcp-range=192.168.111.20,192.168.111.200,12h
+domain-needed
+filterwin2k
+interface=eth1
+no-dhcp-interface=eth0
+no-hosts' > /etc/dnsmasq.conf
 
 echo "### configuring network interfaces" 2>&1 >> $LOGFILE
 cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP 2>&1 >> $LOGFILE
-cp -v /opt/nayaboh/config_files/etc_network_interfaces /etc/network/interfaces 2>&1 >> $LOGFILE
+echo 'auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet static
+        address 192.168.111.1
+        netmask 255.255.255.0
+        broadcast 192.168.111.255
+        network 192.168.111.0' > /etc/network/interfaces
 
 echo "### configuring software sources" 2>&1 >> $LOGFILE
 cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP 2>&1 >> $LOGFILE
 cat $(ls -1rt /etc/apt/sources.list_BACKUP* | tail -1) | egrep -v "^#|updates|security" | sort -u > /etc/apt/sources.list
-
-echo "### install proxy report in cron" 2>&1 >> $LOGFILE
-crontab /opt/nayaboh/config_files/crontab.sarg 2>&1 >> $LOGFILE
-
 
 echo "### restart network interfaces" 2>&1 >> $LOGFILE
 ifdown eth0 2>&1 >> $LOGFILE
