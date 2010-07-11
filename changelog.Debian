@@ -1,5 +1,15 @@
-nayaboh (0.4-5) unstable; urgency=low
+nayaboh (0.4-6) unstable; urgency=low
 
-  * Initial Release.
+  * nearly lintian conform
+  * removed sarg
+  * benchmark other websites
+  * debug firewall
+  * removed dialog from setup
 
  -- Boris Däppen <boris_daeppen@bluewin.ch>  Sun, 11 Jul 2010 00:00:00 +0000
+
+nayaboh (0.4-5) unstable; urgency=low
+
+  * Initial Release
+
+ -- Boris Däppen <boris_daeppen@bluewin.ch>  Fri, 25 Jun 2010 00:00:00 +0000
