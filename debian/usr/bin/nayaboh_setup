@@ -27,11 +27,10 @@ echo "INSTALLATION OF NaYaBoh AT $TIMESTAMP" 2>&1 >> $LOGFILE
 echo "----------------------------------------------" 2>&1 >> $LOGFILE
 echo "" >> $LOGFILE
 
-(echo "### configuring routing" 2>&1 >> $LOGFILE
+echo "### configuring routing" 2>&1 >> $LOGFILE
 cp -v /etc/rc.local /etc/rc.local_$BACKUP 2>&1 >> $LOGFILE
 cp -v /opt/nayaboh/config_files/etc_rc.local /etc/rc.local 2>&1 >> $LOGFILE
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
-echo 1
 
 echo "### configuring squid proxy" 2>&1 >> $LOGFILE
 cp -v /etc/squid/squid.conf /etc/squid/squid.conf_$BACKUP 2>&1 >> $LOGFILE
@@ -52,43 +51,32 @@ sed -i "5ihttp_port 3128 transparent" /etc/squid/squid.conf
 sed -i "6iredirect_program /usr/bin/adzapper.wrapper" /etc/squid/squid.conf
 # squid_disk is actually in MB, by treating it as KB I devide it by 1000
 sed -i "7imaximum_object_size $squid_disk KB" /etc/squid/squid.conf
-echo 2
 
 echo "### configuring dns and dhcp" 2>&1 >> $LOGFILE
 cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf_$BACKUP 2>&1 >> $LOGFILE
 cp -v /opt/nayaboh/config_files/etc_dnsmasq.conf /etc/dnsmasq.conf 2>&1 >> $LOGFILE
-echo 3
 
 echo "### configuring network interfaces" 2>&1 >> $LOGFILE
 cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP 2>&1 >> $LOGFILE
 cp -v /opt/nayaboh/config_files/etc_network_interfaces /etc/network/interfaces 2>&1 >> $LOGFILE
-echo 4
 
 echo "### configuring software sources" 2>&1 >> $LOGFILE
 cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP 2>&1 >> $LOGFILE
 cat $(ls -1rt /etc/apt/sources.list_BACKUP* | tail -1) | egrep -v "^#|updates|security" | sort -u > /etc/apt/sources.list
-echo 5
 
 echo "### install proxy report in cron" 2>&1 >> $LOGFILE
 crontab /opt/nayaboh/config_files/crontab.sarg 2>&1 >> $LOGFILE
-echo 6
 
 
 echo "### restart network interfaces" 2>&1 >> $LOGFILE
 ifdown eth0 2>&1 >> $LOGFILE
-echo 10
 ifdown eth1 2>&1 >> $LOGFILE
-echo 15
 ifup eth0 2>&1 >> $LOGFILE
-echo 25
 ifup eth1 2>&1 >> $LOGFILE
-echo 30
 echo "### restart dnsmasq" 2>&1 >> $LOGFILE
 /etc/init.d/dnsmasq restart 2>&1 >> $LOGFILE
-echo 40
 echo "### start routing" 2>&1 >> $LOGFILE
 sysctl -p /etc/sysctl.conf 2>&1 >> $LOGFILE
-echo 45
 echo "### restart squid" 2>&1 >> $LOGFILE
 # because ubuntu 10.04 is using upstart for squid
 # but debian does not I need to find out which system is used
@@ -97,14 +85,12 @@ if which initctl && initctl --version | grep -i upstart
     echo "upstart installed, try use upstart..." 2>&1 >> $LOGFILE
     echo "stopping squid..." 2>&1 >> $LOGFILE
     initctl stop squid 2>&1 >> $LOGFILE
-    echo 50
     sleep 5
     while ps aux | grep squid | grep -v grep
     do
         echo "squid is still up, waiting 3 seconds..." 2>&1 >> $LOGFILE
         sleep 3
     done
-    echo 55
     echo 'squid is down!' 2>&1 >> $LOGFILE
     sleep 1
     echo "starting squid..." 2>&1 >> $LOGFILE
@@ -113,14 +99,10 @@ else
     echo "no upstart installed, try use init script..." 2>&1 >> $LOGFILE
     /etc/init.d/squid restart 2>&1 >> $LOGFILE
 fi
-echo 60
 echo "### execute iptables in /etc/rc.local" 2>&1 >> $LOGFILE
 bash /etc/rc.local 2>&1 >> $LOGFILE
-echo 70
 echo "### update package database" 2>&1 >> $LOGFILE
 aptitude update 2>&1 >> $LOGFILE
-echo 90
-echo 100 ) | dialog --title "NaYaBoh setup" --gauge "Configuring and restarting services, this may take a while..." 13 55
 
 echo "INSTALLATION FINISHED AT $(date +%Y-%m-%d_%H:%M:%S)" 2>&1 >> $LOGFILE
 dialog --title "NaYaBoh setup" \
