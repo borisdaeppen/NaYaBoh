@@ -51,11 +51,10 @@ my $highest = 0;
 my @time_proxy = ();
 my @time_noproxy = ();
 
-my @pages = (   'http://www.google.com/',
+my @pages = (   'http://opensource.org/',
                 'http://www.gnu.org/',
-                'http://yahoo.com/',
-                'https://login.yahoo.com/',
-                'http://hackles.org/'
+                'http://home.gna.org/nayaboh/',
+                'http://nayaboh.sourceforge.net/'
                 );
 
 
