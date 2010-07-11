@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=NaYaBoh Statistics
-Comment=see Internet access statistics
-Terminal=false
-Exec=/usr/bin/nayaboh_proxy_statistics
-Icon=/opt/nayaboh/icon48.png
-Type=Application
-Categories=System;

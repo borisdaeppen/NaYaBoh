@@ -120,8 +120,6 @@ echo 70
 echo "### update package database" 2>&1 >> $LOGFILE
 aptitude update 2>&1 >> $LOGFILE
 echo 90
-echo "### initialise sarg statistics" 2>&1 >> $LOGFILE
-/usr/bin/sarg -g e -o /opt/nayaboh/proxy_stats 2>&1 >> $LOGFILE
 echo 100 ) | dialog --title "NaYaBoh setup" --gauge "Configuring and restarting services, this may take a while..." 13 55
 
 echo "INSTALLATION FINISHED AT $(date +%Y-%m-%d_%H:%M:%S)" 2>&1 >> $LOGFILE

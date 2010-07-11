@@ -1,5 +1,0 @@
-#!/bin/sh
-
-STATS=/opt/nayaboh/proxy_stats/index.html
-firefox $STATS || iceweasel $STATS || epiphany $STATS || lynx $STATS || echo "Please install a browser (firefox, iceweasel, epiphany or lynx)"
-
