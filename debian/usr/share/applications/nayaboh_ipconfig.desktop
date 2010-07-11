@@ -4,6 +4,6 @@ Name=NaYaBoh Network
 Comment=change the internal IP network
 Terminal=true
 Exec=bash -c "/usr/bin/nayaboh_ipconfig ; bash"
-Icon=/opt/nayaboh/icon48.png
+Icon=/usr/share/icons/nayaboh48x48.png
 Type=Application
 Categories=System;

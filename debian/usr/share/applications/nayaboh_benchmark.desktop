@@ -4,6 +4,6 @@ Name=NaYaBoh Benchmark
 Comment=measure the efficiency of NaYaBoh, live
 Terminal=true
 Exec=sudo /usr/bin/nayaboh_benchmark 2
-Icon=/opt/nayaboh/icon48.png
+Icon=/usr/share/icons/nayaboh48x48.png
 Type=Application
 Categories=System;

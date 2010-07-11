@@ -4,6 +4,6 @@ Name=NaYaBoh Install-Report
 Comment=see a report of the NaYaBoh installation
 Terminal=true
 Exec=/usr/bin/nayaboh_installreport
-Icon=/opt/nayaboh/icon48.png
+Icon=/usr/share/icons/nayaboh48x48.png
 Type=Application
 Categories=System;

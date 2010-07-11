@@ -4,6 +4,6 @@ Name=NaYaBoh Firewall
 Comment=block certain computers from Internet access
 Terminal=true
 Exec=bash -c "/usr/bin/nayaboh_firewall ; bash"
-Icon=/opt/nayaboh/icon48.png
+Icon=/usr/share/icons/nayaboh48x48.png
 Type=Application
 Categories=System;
