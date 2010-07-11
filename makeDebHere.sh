@@ -19,7 +19,7 @@
 
 
 # remove old packages
-rm nayaboh*.deb
+rm nayaboh*.deb 2> /dev/null
 
 # pack manpage
 cp documentation/manpage/nayaboh*.1 debian/usr/share/man/man1/
