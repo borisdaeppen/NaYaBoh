@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 echo '### STOPPING SQUID'
 if which initctl && initctl --version | grep -i upstart
@@ -15,13 +15,23 @@ if which initctl && initctl --version | grep -i upstart
     echo 'squid is down!'
 else
     echo "no upstart installed, try use init script..."
-    /etc/init.d/squid stop
+    if which invoke-rc.d >/dev/null 2>&1; then
+        # have to use invoke-rc.d, like told here:
+        # http://www.debian.org/doc/debian-policy/ch-opersys.html#s9.3.3.2
+        invoke-rc.d squid stop
+    else
+        /etc/init.d/squid stop
+    fi
 fi
 
 echo '### STOPPING DNSMASQ'
-/etc/init.d/dnsmasq stop
-
+if which invoke-rc.d >/dev/null 2>&1; then
+    # have to use invoke-rc.d, like told here:
+    # http://www.debian.org/doc/debian-policy/ch-opersys.html#s9.3.3.2
+    invoke-rc.d dnsmasq stop
+else
+    /etc/init.d/dnsmasq stop
+fi
 
 exit 0
-
 
