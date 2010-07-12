@@ -81,7 +81,7 @@ domain-needed
 filterwin2k
 interface=eth1
 no-dhcp-interface=eth0
-no-hosts' > /etc/dnsmasq.conf 2>&1 >> $LOGFILE
+no-hosts' > /etc/dnsmasq.conf
 
 say "### configuring network interfaces"
 cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP 2>&1 >> $LOGFILE
@@ -96,7 +96,7 @@ iface eth1 inet static
         address 192.168.111.1
         netmask 255.255.255.0
         broadcast 192.168.111.255
-        network 192.168.111.0' > /etc/network/interfaces 2>&1 >> $LOGFILE
+        network 192.168.111.0' > /etc/network/interfaces
 
 echo "### configuring software sources" 2>&1 >> $LOGFILE
 cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP 2>&1 >> $LOGFILE
