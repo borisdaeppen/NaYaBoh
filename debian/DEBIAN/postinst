@@ -1,5 +1,134 @@
 #!/bin/bash -e
 
-nayaboh_setup
+# Copyright 2010 Boris Daeppen <boris_daeppen@bluewin.ch>
+# 
+# This file is part of NaYaBoh.
+# 
+# NaYaBoh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# NaYaBoh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with NaYaBoh.  If not, see <http://www.gnu.org/licenses/>.
+
+
+TIMESTAMP=$(date +%Y-%m-%d_%H:%M:%S)
+BACKUP=BACKUP_$TIMESTAMP
+LOGFILE='/var/log/nayaboh/install.log'
+
+mkdir /var/log/nayaboh
+
+echo "" > $LOGFILE
+echo "INSTALLATION OF NaYaBoh AT $TIMESTAMP" 2>&1 >> $LOGFILE
+echo "----------------------------------------------" 2>&1 >> $LOGFILE
+echo "" >> $LOGFILE
+
+echo "### configuring routing" 2>&1 >> $LOGFILE
+cp -v /etc/rc.local /etc/rc.local_$BACKUP 2>&1 >> $LOGFILE
+echo '#!/bin/sh -e
+# THIS SCRIPT WAS ALTERED BY NAYABOH
+
+# internet gateway routing
+iptables -P FORWARD ACCEPT
+iptables --table nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+# proxy trancparency
+iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 80 -j REDIRECT --to-port 3128
 
 exit 0
+' > /etc/rc.local
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+
+echo "### configuring squid proxy" 2>&1 >> $LOGFILE
+cp -v /etc/squid/squid.conf /etc/squid/squid.conf_$BACKUP 2>&1 >> $LOGFILE
+cat $(ls -1rt /etc/squid/squid.conf_BACKUP* | head -1) > /etc/squid/squid.conf # bring the oldest (original) back in place
+total_memory=$(free -m | grep Mem | awk '{print $2}')
+squid_memory=$(echo "$total_memory / 4" | bc)
+total_disk=$(df -m /var/spool/squid | grep '/' | awk '{print $4}')
+squid_disk=$(echo "$total_disk / 2" | bc)
+echo "squid_disk=$squid_disk MB" >> $LOGFILE
+echo "squid_memory=$squid_memory MB" >> $LOGFILE
+
+#add nayaboh config to beginning of squid.conf because acl deny in the middle of conf file
+sed -i "1icache_dir ufs /var/spool/squid $squid_disk 16 256" /etc/squid/squid.conf
+sed -i "2icache_mem $squid_memory MB" /etc/squid/squid.conf
+sed -i "3iacl nayaboh src 192.168.111.0/255.255.255.0" /etc/squid/squid.conf
+sed -i "4ihttp_access allow nayaboh" /etc/squid/squid.conf
+sed -i "5ihttp_port 3128 transparent" /etc/squid/squid.conf
+sed -i "6iredirect_program /usr/bin/adzapper.wrapper" /etc/squid/squid.conf
+# squid_disk is actually in MB, by treating it as KB I devide it by 1000
+sed -i "7imaximum_object_size $squid_disk KB" /etc/squid/squid.conf
+
+echo "### configuring dns and dhcp" 2>&1 >> $LOGFILE
+cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf_$BACKUP 2>&1 >> $LOGFILE
+echo 'bogus-priv
+dhcp-range=192.168.111.20,192.168.111.200,12h
+domain-needed
+filterwin2k
+interface=eth1
+no-dhcp-interface=eth0
+no-hosts' > /etc/dnsmasq.conf
+
+echo "### configuring network interfaces" 2>&1 >> $LOGFILE
+cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP 2>&1 >> $LOGFILE
+echo 'auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet static
+        address 192.168.111.1
+        netmask 255.255.255.0
+        broadcast 192.168.111.255
+        network 192.168.111.0' > /etc/network/interfaces
+
+echo "### configuring software sources" 2>&1 >> $LOGFILE
+cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP 2>&1 >> $LOGFILE
+cat $(ls -1rt /etc/apt/sources.list_BACKUP* | tail -1) | egrep -v "^#|updates|security" | sort -u > /etc/apt/sources.list
+
+echo "### restart network interfaces" 2>&1 >> $LOGFILE
+ifdown eth0 2>&1 >> $LOGFILE
+ifdown eth1 2>&1 >> $LOGFILE
+ifup eth0 2>&1 >> $LOGFILE
+ifup eth1 2>&1 >> $LOGFILE
+echo "### restart dnsmasq" 2>&1 >> $LOGFILE
+/etc/init.d/dnsmasq restart 2>&1 >> $LOGFILE
+echo "### start routing" 2>&1 >> $LOGFILE
+sysctl -p /etc/sysctl.conf 2>&1 >> $LOGFILE
+echo "### restart squid" 2>&1 >> $LOGFILE
+# because ubuntu 10.04 is using upstart for squid
+# but debian does not I need to find out which system is used
+if which initctl && initctl --version | grep -i upstart
+    then
+    echo "upstart installed, try use upstart..." 2>&1 >> $LOGFILE
+    echo "stopping squid..." 2>&1 >> $LOGFILE
+    initctl stop squid 2>&1 >> $LOGFILE
+    sleep 5
+    while ps aux | grep squid | grep -v grep
+    do
+        echo "squid is still up, waiting 3 seconds..." 2>&1 >> $LOGFILE
+        sleep 3
+    done
+    echo 'squid is down!' 2>&1 >> $LOGFILE
+    sleep 1
+    echo "starting squid..." 2>&1 >> $LOGFILE
+    initctl start squid 2>&1 >> $LOGFILE
+else
+    echo "no upstart installed, try use init script..." 2>&1 >> $LOGFILE
+    invoke-rc.d squid restart 2>&1 >> $LOGFILE
+fi
+echo "### execute iptables in /etc/rc.local" 2>&1 >> $LOGFILE
+bash /etc/rc.local 2>&1 >> $LOGFILE
+echo "### update package database" 2>&1 >> $LOGFILE
+aptitude update 2>&1 >> $LOGFILE
+
+echo "INSTALLATION FINISHED AT $(date +%Y-%m-%d_%H:%M:%S)" 2>&1 >> $LOGFILE
+
