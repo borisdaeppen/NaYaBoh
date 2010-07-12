@@ -26,7 +26,11 @@ function say {
     echo $1 >> $LOGFILE
 }
 
-mkdir /var/log/nayaboh
+if [ -d /var/log/nayaboh ]; then
+    echo "/var/log/nayaboh exists"
+else
+    mkdir /var/log/nayaboh
+fi
 
 echo "" > $LOGFILE
 say "INSTALLATION OF NaYaBoh AT $TIMESTAMP"
@@ -121,7 +125,7 @@ if which initctl && initctl --version | grep -i upstart
     then
     say "upstart installed, try use upstart..."
     say "stopping squid..."
-    initctl stop squid 2>&1 >> $LOGFILE
+    initctl stop squid || echo "squid seems to be down" 2>&1 >> $LOGFILE 
     sleep 5
     while ps aux | grep squid | grep -v grep
     do
@@ -138,8 +142,7 @@ else
 fi
 say "### execute iptables in /etc/rc.local"
 bash /etc/rc.local 2>&1 >> $LOGFILE
-say "### update package database"
-aptitude update 2>&1 >> $LOGFILE
+say "### you should type 'sudo aptitude update' to update your cache"
 
 say "INSTALLATION FINISHED AT $(date +%Y-%m-%d_%H:%M:%S)"
 
