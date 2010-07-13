@@ -22,6 +22,7 @@
 rm nayaboh*.deb 2> /dev/null
 
 # pack manpage
+mkdir -p debian/usr/share/man/man1
 cp documentation/manpage/nayaboh*.1 debian/usr/share/man/man1/
 gzip --best debian/usr/share/man/man1/nayaboh*.1
 
