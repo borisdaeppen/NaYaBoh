@@ -1,9 +1,35 @@
 #!/bin/sh
 
+# Copyright 2010 Boris Daeppen <boris_daeppen@bluewin.ch>
+# 
+# This file is part of NaYaBoh.
+# 
+# NaYaBoh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# NaYaBoh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with NaYaBoh.  If not, see <http://www.gnu.org/licenses/>.
+
+
+# TODO:
+# This whole script is a very hack
+# somebody should definitely give it a try
+
 NEW=$1
 
 if test ! $1
     then
+    echo 'ATTENTION: THIS SCRIPT MAY NOT BE SAFE'
+    echo ''
+    echo 'if you want to quit press CTRL-C'
+    echo ''
     echo 'Enter the first three numbers of your network of choice.'
     echo 'I mean the X in this example -> X.X.X.Z'
     echo -n "Enter your IP and press [ENTER]: "
@@ -21,13 +47,28 @@ echo 'Changes took effect here:'
 sudo grep -F $NEW /usr/bin/nayaboh_benchmark /etc/squid/squid.conf /etc/network/interfaces /etc/dnsmasq.conf
 echo ''
 
+####################
+# RESTART SERVICES #
+####################
+
+# NETWORK
 echo "### restart network interfaces"
-sudo ifdown eth0
-sudo ifdown eth1
-sudo ifup eth0
-sudo ifup eth1
+ifdown eth0
+ifdown eth1
+ifup eth0
+ifup eth1
+
+# DNSMASQ
 echo "### restart dnsmasq"
-sudo /etc/init.d/dnsmasq restart
+# should try invoke-rc.d, like told here:
+# http://www.debian.org/doc/debian-policy/ch-opersys.html#s9.3.3.2
+if which invoke-rc.d >/dev/null 2>&1; then
+    invoke-rc.d dnsmasq restart
+else
+    /etc/init.d/dnsmasq restart
+fi
+
+# SQUID
 echo "### restart squid"
 # because ubuntu 10.04 is using upstart for squid
 # but debian does not I need to find out which system is used
@@ -35,20 +76,33 @@ if which initctl && initctl --version | grep -i upstart
     then
     echo "upstart installed, try use upstart..."
     echo "stopping squid..."
-    sudo initctl stop squid
-    sleep 5
-    while ps aux | grep squid | grep -v grep
-    do
-        echo "squid is still up, waiting 3 seconds..."
-        sleep 3
-    done
+    # use Upstart-Stop only if squid is up!
+    if ps aux | grep squid | grep -v grep
+        then
+        initctl stop squid
+        # then wait and check if squid is finally down
+        sleep 5
+        while ps aux | grep squid | grep -v grep
+        do
+            echo "squid is still up, waiting 3 seconds..."
+            sleep 3
+        done
+    fi
     echo 'squid is down!'
+    # I hate and/or don't understand Upstart...
     sleep 1
     echo "starting squid..."
-    sudo initctl start squid
+    # ...at least starting is easy
+    initctl start squid
 else
     echo "no upstart installed, try use init script..."
-    sudo /etc/init.d/squid restart
+    # should try invoke-rc.d, like told here:
+    # http://www.debian.org/doc/debian-policy/ch-opersys.html#s9.3.3.2
+    if which invoke-rc.d >/dev/null 2>&1; then
+        invoke-rc.d squid restart
+    else
+        /etc/init.d/squid restart
+    fi
 fi
 
 exit 0
