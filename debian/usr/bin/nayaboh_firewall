@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# Copyright 2010 Boris Daeppen <boris_daeppen@bluewin.ch>
+# 
+# This file is part of NaYaBoh.
+# 
+# NaYaBoh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# NaYaBoh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with NaYaBoh.  If not, see <http://www.gnu.org/licenses/>.
+
+
 # list all rules in the FOREWARD chain
 sudo iptables -n -L FORWARD --line-numbers | tail -n +2
 # only show one chain, easier to read
