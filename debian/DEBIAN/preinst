@@ -27,21 +27,21 @@ echo '### STOPPING SQUID'
 # but debian does not I need to find out which system is used
 if which initctl && initctl --version | grep -i upstart
     then
-    say "upstart installed, try use upstart..."
-    say "stopping squid..."
+    echo "upstart installed, try use upstart..."
+    echo "stopping squid..."
     # use Upstart-Stop only if squid is up!
     if ps aux | grep squid | grep -v grep
         then
-        initctl stop squid 2>&1 >> $LOGFILE 
+        initctl stop squid
         # then wait and check if squid is finally down
         sleep 5
         while ps aux | grep squid | grep -v grep
         do
-            say "squid is still up, waiting 3 seconds..."
+            echo "squid is still up, waiting 3 seconds..."
             sleep 3
         done
     fi  
-    say 'squid is down!'
+    echo 'squid is down!'
 else
     echo "no upstart installed, try use init script..."
     # should try invoke-rc.d, like told here:
