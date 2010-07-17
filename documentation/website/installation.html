@@ -1,116 +1,85 @@
-<h3>What is it?</h3>
-<p>NaYaBoh is an "Internet Proxy Server", especially designed to enhance Internet access in developing countries.</p>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>NaYaBoh</title>
+<meta name="generator" content="Bluefish 1.0.7"/>
+<meta name="author" content="Boris"/>
+<meta name="date" content="2010-07-17T19:29:20+0100"/>
+<meta name="copyright" content="GPL v3"/>
+<meta name="keywords" content="Internet Proxy"/>
+<meta name="description" content="Speed up your Internet"/>
+<meta name="ROBOTS" content="INDEX, FOLLOW"/>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+<meta http-equiv="content-style-type" content="text/css"/>
+<link href="style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
 
-<p>So if you run a Cybar (Internet place), a Classroom or any other computer network this project can help you - for free.</p>
+<h1>NaYaBoh - Installation</h1>
 
-<p>I started developing NaYaBoh during my stay in Cameroon. So I named it in the Pidgin language, a widely used westafrican dialect. In this dialect "na ya boh" can be translated with "this is your friend", I hope the name is influencing the project...</p>
-
-<p>See this picture to understand in a simple way what NaYaBoh is doing.
-<pre style="display: block; margin-left: auto; margin-right: auto; text-align: center; font-style: italic;"><a href="http://freiquell.files.wordpress.com/2010/03/nayaboh_manual_benchmark.png"><img class="displayed" title="NaYaBoh_manual_benchmark" src="http://freiquell.files.wordpress.com/2010/03/nayaboh_manual_benchmark.png" alt="Benchmark of NaYaBoh against normal Internet" width="450" height="398" /></a>
-Comparison of Internet speed with and without NaYaBoh
-</pre>
-Without NaYaBoh half of the Internet requests needed more that six seconds to complete. With NaYaBoh nearly 90% of the requests where finished after one second.</p>
-
-<p>So NaYaBoh makes your Internet connection faster. I'll explain later how it works.</p>
-<h3>How can I get it?</h3>
+<h2>How can I get it?</h2>
 <p>NaYaBoh is completely free to use. This is so because all it's parts are licensed under open source licenses. If you want to learn more about open source you can start reading here: <a href="http://www.gnu.org/">http://www.gnu.org/</a> and <a href="http://opensource.org/">http://opensource.org/</a></p>
 
-<p>To run NaYaBoh you need the following things:
+<p>To run NaYaBoh you need the following things:</p>
 <ul>
     <li>A computer with two network cards.</li>
-    <li>Operating System: Ubuntu (or any debian linux)</li>
+    <li>Operating System: Ubuntu (or any Debian GNU/Linux)</li>
     <li>The NaYaBoh package</li>
 </ul>
-Where can you get this things from?</p>
-<h4>Computer</h4>
-<p>With the computer I can not help you. I can just tell you that it can be any ordinary old computer. The only requirement is that there are two network cards.
-<pre style="display: block; margin-left: auto; margin-right: auto; text-align: center; font-style: italic;"><a href="http://freiquell.files.wordpress.com/2010/03/nayaboh_limbe.jpg"><img class="displayed" title="NaYaBoh_Limbe" src="http://freiquell.files.wordpress.com/2010/03/nayaboh_limbe.jpg" alt="Example of NaYaBoh hardware used in Limbe" width="300" height="225" /></a>
-Example of NaYaBoh hardware used in Limbe
-</pre>
-See this example, it was send to me from a school in Limbe, Cameroon. They installed NaYaBoh on a mini itx board (<a href="http://www.pcengines.ch">www.pcengines.ch</a>) which consumes only 5 watts. The operating system is on a 1 GB flash device. The board has only one Ethernet card, the second network card is as USB Ethernet adapter. (Thank you <a href="http://sokolo.cronopios.org/">Michel</a>, for this example)</p>
-<h4>Operating System</h4>
+<p>Where can you get this things from?</p>
+<h3>Computer</h3>
+<p>With the computer I can not help you. I can just tell you that it can be any ordinary old computer. The only requirement is that there are two network cards.</p>
+<div><img class="center" title="NaYaBoh_Limbe" src="pics/nayaboh_limbe.jpg" alt="Example of NaYaBoh hardware used in Limbe" /></div>
+<pre class="imgtxt">Example of NaYaBoh hardware used in Limbe</pre>
+<p>See this example, it was send to me from a school in Limbe, Cameroon. They installed NaYaBoh on a mini itx board (<a href="http://www.pcengines.ch">www.pcengines.ch</a>) which consumes only 5 watts. The operating system is on a 1 GB flash device. The board has only one Ethernet card, the second network card is as USB Ethernet adapter. (Thank you <a href="http://sokolo.cronopios.org/">Michel</a>, for this example)</p>
+<h3>Operating System</h3>
 <p>Since Windows is not free you should use any Linux (which is free) for NaYaBoh. In fact NaYaBoh is NOT running on Windows.</p>
 
 <p><a href="http://www.ubuntu.com">Ubuntu</a> is a very user-friendly version of Linux. So I recommend that you use it, since I also test NaYaBoh on it. You can download Ubuntu here: <a href="http://www.ubuntu.com/GetUbuntu/download">http://www.ubuntu.com/GetUbuntu/download</a></p>
 
 <p>If you are an experienced Linux user you can also try the Ubuntu server version or any Debian.</p>
-<h4>NaYaBoh</h4>
+<h3>NaYaBoh</h3>
 <p>You can download NaYaBoh directly from where it is developed. Use this link: <a href="http://sourceforge.net/projects/nayaboh/">http://sourceforge.net/projects/nayaboh/</a></p>
 
 <p>Remember that there is no warranty of functionality. Make sure that you download the most recent version, since this is most likely the best one.</p>
-<h3>How do I install it?</h3>
-First you need to make sure that you connect everything correctly.
+<h2>How do I install it?</h2>
+<p>First you need to make sure that you connect everything correctly.</p>
 
-<p>Your internet router should give dynamic IP (DHCP), so that NaYaBoh will receive one automatically.</p>
+<p>Your Internet router should give dynamic IP (DHCP), so that NaYaBoh will receive one automatically.</p>
 
-<p>It is not very simple to know which network card has to be pluged to the Internet and which to the local switch. I have no simple "howto" for now. Just try your luck and all your intelligence :-)
-<pre style="display: block; margin-left: auto; margin-right: auto; text-align: center; font-style: italic;"><a href="http://freiquell.files.wordpress.com/2010/03/nayaboh_setup.png"><img class="displayed" title="NaYaBoh_setup" src="http://freiquell.files.wordpress.com/2010/03/nayaboh_setup.png?w=228" alt="Setup of NaYaBoh" width="228" height="300" /></a>
-Setup of NaYaBoh
-</pre></p>
+<p>It is not very simple to know which network card has to be pluged to the Internet and which to the local switch.
+I have no simple "howto" for now. Just try your luck and all your intelligence :-)</p>
+<div><img class="center" title="NaYaBoh_setup" src="pics/nayaboh_setup.png" alt="Setup of NaYaBoh" /></div>
+<pre class="imgtxt">Setup of NaYaBoh</pre>
 <p>Installing Ubuntu should be even more easy than installing Windows. Burn it on a CD and start the Computer using this CD. Then follow the instructions.</p>
 
 <p>Installing NaYaBoh is actually very simple. Just put the file which you have downloaded on as USB flash and drag it on the Ubuntu Desktop. A simple double click on the file should start the installation routine.</p>
 
-<p>If you have an error (concerning "dnsmasq") at the very beginning this is most likely because Ubuntu could not update it's available packages during the installation. To solve this open in the menu Applications -&gt; Accessories -&gt; Terminal and type the following:
-<pre style="border: 1px dashed #999999; padding: 5px; overflow: auto; font-family: Andale Mono,Lucida Console,Monaco,fixed,monospace; color: #000000; background-color: #eeeeee; font-size: 12px; line-height: 14px; width: 100%;"><code>sudo aptitude update
-</code></pre></p>
-<p>After pressing Enter you will be asked for your user password. The update should be done now (Internet required). If you are now asked to upgrade your system, don't do it, it will eat your internet for nothing.</p>
+<p>If you have an error (concerning "dnsmasq") at the very beginning this is most likely because Ubuntu could not update it's available packages during the installation. To solve this open in the menu Applications -&gt; Accessories -&gt; Terminal and type the following:</p>
+<pre class="code"><code>sudo aptitude update</code></pre>
+<p>After pressing Enter you will be asked for your user password. The update should be done now (Internet required). If you are now asked to upgrade your system, don't do it, it will eat your Internet for nothing.</p>
 
 <p>Double click again the package to start the installation. The installation process also needs Internet, because he is downloading additional software. Actually it is downloading the main operating software, NaYaBoh just does the configuration.</p>
-<h3>How do I run it?</h3>
-<p>When you connect your computers over a switch to NaYaBoh make sure that they are configured to receive their network configuration by DHCP. In Windows you have to do it like in the picture.
-<pre style="display: block; margin-left: auto; margin-right: auto; text-align: center; font-style: italic;"><a href="http://i.technet.microsoft.com/Bb457086.tcpfig1(en-us,TechNet.10).gif"><img class="displayed" title="winxptcpipdhcp" src="http://i.technet.microsoft.com/Bb457086.tcpfig1(en-us,TechNet.10).gif" alt="DHCP menu windows" width="303" height="341" /></a>
-Configure your Windows clients like this
-</pre></p>
-<p>When you log in into your NaYaBoh Computer you will find some helpful tools in the menu.
-<pre style="display: block; margin-left: auto; margin-right: auto; text-align: center; font-style: italic;"><a href="http://sourceforge.net/dbimage.php?id=266616"><img class="displayed" title="NaYaBoh_menu" src="http://sourceforge.net/dbimage.php?id=266616" alt="Menu of NaYaBoh" width="350" height="259" /></a>
-Tools to maintain NaYaBoh
-</pre></p>
-<p>This tools are also available in the command line for those who don't have a GUI installed.
-<pre style="border: 1px dashed #999999; padding: 5px; overflow: auto; font-family: Andale Mono,Lucida Console,Monaco,fixed,monospace; color: #000000; background-color: #eeeeee; font-size: 12px; line-height: 14px; width: 100%;"><code>nayaboh_benchmark
-nayaboh_connections
-nayaboh_firewall
-nayaboh_installreport
-nayaboh_ipconfig
-nayaboh_proxylog
-</code></pre>
-A short explanation to this tools:
-<ul>
-    <li><strong>Benchmark:</strong> Measuring Internet requests and create a picture in your home. It tries to show you how effective NaYaBoh is at your place.</li>
-    <li><strong>Connections:</strong> Listing all the computers which are using Internet trough NaYaBoh.</li>
-    <li><strong>Firewall:</strong> Block misbehaving or virus infected computers from the Internet.</li>
-    <li><strong>Installation Report:</strong> See messages from the installation process.</li>
-    <li><strong>IP config:</strong> Change the IP of your internal network.</li>
-    <li><strong>Proxy Log View:</strong> Follow live the requests handled by the proxy.</li>
-</ul></p>
-<h3>How does it work?</h3>
-<p>NaYaBoh is using several techniques to speed up your internet:
-<ul>
-    <li>It caches web content like pictures, style-sheets, etc. Whenever a page is accessed the second time NaYaBoh will deliver web-content directly. NaYaBoh is using the <a href="http://www.squid-cache.org/">squid</a> software to do this.</li>
-    <li>It blocks advertisement and by doing so it prevents unneccessary downloads. NaYaBoh is using the <a href="http://adzapper.sourceforge.net/">adzapper</a> software to achieve this.</li>
-    <li>It caches your DNS requests and answers them diectly. NaYaBoh is using <a href="http://www.thekelleys.org.uk/dnsmasq/doc.html">dnsmasq</a> to do so.</li>
-</ul>
-Furthermore NaYaBoh eases network management by providing a DHCP server. So that all you computers will get their network configuration (e.g. IP) automatically.</p>
-<h3>Let me know!</h3>
-<p>If you have questions of feedback, I'm very glad to hear from you.</p>
+<h2>How do I run it?</h2>
+<p>When you connect your computers over a switch to NaYaBoh make sure that they are configured to receive their network configuration by DHCP. In Windows you have to do it like in the picture.</p>
+<div><img class="center" title="winxptcpipdhcp" src="http://i.technet.microsoft.com/Bb457086.tcpfig1(en-us,TechNet.10).gif" alt="DHCP menu windows" width="303" height="341" /></div>
+<pre class="imgtxt">Configure your Windows clients like this</pre>
+<p>Apart from that there is not much to do. The NaYaBoh machine just needs to be on.</p>
 
-<p>Send me some of your benchmark pictures and information about your location and how many computers you have connected.
-<pre style="display: block; margin-left: auto; margin-right: auto; text-align: center; font-style: italic;"><a href="http://freiquell.files.wordpress.com/2010/03/my_email.png"><img class="displayed" title="my_email" src="http://freiquell.files.wordpress.com/2010/03/my_email.png" alt="this is a warp hole" width="205" height="27" /></a>
-send me your feedback
-</pre>
-I would like to hear from you!</p>
+<!-- Footer, should be at the end of every page -->
+<p>&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;<br /></p>
+<p><a href="http://validator.w3.org/check?uri=referer">
+		<img src="http://www.w3.org/Icons/valid-xhtml11"
+		     alt="Valid XHTML 1.1" /></a>
+   <a href="http://jigsaw.w3.org/css-validator/check/referer">
+		<img style="border:0;width:88px;height:31px"
+			  src="http://jigsaw.w3.org/css-validator/images/vcss"
+           alt="Valid CSS!" /></a>
+<br /><span style="font-size: smaller;">This website may be ugly - but standard conform!</span>
+<br /><span style="font-size: smaller;">This website was last updated for the NaYaBoh 0.4-6 release.</span>
+</p>
 
-<p>There is also a <a href="http://www.facebook.com/?ref=home#!/group.php?gid=137097159648557">Facebook group</a> for those who wish to meet other users on this social platform.</p>
-
-<p>See the benchmark created with my own installation:
-<pre style="display: block; margin-left: auto; margin-right: auto; text-align: center; font-style: italic;"><a href="http://freiquell.files.wordpress.com/2010/07/nayaboh_benchmark.png"><img class="displayed" title="NaYaBoh_Benchmark_example" src="http://freiquell.files.wordpress.com/2010/07/nayaboh_benchmark.png" alt="NaYaBoh Benchmark" width="450" height="225" /></a>
-Installation in an IT-Centre in Buea, Cameroon. About 30 Windows clients online simultaneously. (CLICK PICTURE TO ENLARGE)
-</pre></p>
-<h3>About this Site</h3>
-<p>This website is available on the following at Sourceforge: <a href="http://nayaboh.sourceforge.net/">http://nayaboh.sourceforge.net/</a></p>
-
-<p>The project can be downloaded here as a software package for GNU/Linux (e.g. Ubuntu): <a href="http://sourceforge.net/projects/nayaboh/">http://sourceforge.net/projects/nayaboh/</a></p>
-
-<p>The source code is hosted on <a href="http://github.com">github</a>. To access the source code visit <a href="http://github.com/borisdaeppen/NaYaBoh">http://github.com/borisdaeppen/NaYaBoh</a>. There is a non regularly backup pushed to <a href="http://sourceforge.net/">Sourceforge</a>.</p>
-
-<p>This website was last updated for the NaYaBoh 0.4-6 release.</p>
+</body>
+</html>

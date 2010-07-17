@@ -10,3 +10,15 @@ img.center {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+pre.code {
+	border: 1px dashed #999999;
+	padding: 5px;
+	overflow: auto;
+	font-family: Andale Mono,Lucida Console,Monaco,fixed,monospace;
+	color: #000000;
+	background-color: #eeeeee;
+	font-size: 12px;
+	line-height: 14px;
+	width: 100%;
+}
