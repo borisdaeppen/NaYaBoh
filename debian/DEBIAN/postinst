@@ -42,7 +42,7 @@ say "----------------------------------------------"
 say ""
 
 # enable the routing machanism of the linux kernel
-echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf 2>&1 >> $LOGFILE
+echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 
 # enable NAT and foreward http to the squid proxy
 say "### configuring routing"
