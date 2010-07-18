@@ -36,7 +36,10 @@ if test ! $1
     read NEW
 fi
 
-NET=$(grep network /etc/network/interfaces | awk '{ print $2 }' | cut -d. -f4 --complement)
+# TODO: the 'tail -n 1' is a very bad hack
+# in case there are two static configured cards
+# it just pics the last one and hopes its the one for the internal network
+NET=$(grep network /etc/network/interfaces | awk '{ print $2 }' | cut -d. -f4 --complement | tail -n 1)
 echo "try to change '$NET' to '$NEW' in this files:"
 echo "/usr/bin/nayaboh_benchmark /etc/squid/squid.conf /etc/network/interfaces /etc/dnsmasq.conf"
 sudo sed -i "s/$NET/$NEW/g" /usr/bin/nayaboh_benchmark /etc/network/interfaces /etc/dnsmasq.conf
@@ -53,19 +56,19 @@ echo ''
 
 # NETWORK
 echo "### restart network interfaces"
-ifdown eth0
-ifdown eth1
-ifup eth0
-ifup eth1
+sudo ifdown eth0
+sudo ifdown eth1
+sudo ifup eth0
+sudo ifup eth1
 
 # DNSMASQ
 echo "### restart dnsmasq"
 # should try invoke-rc.d, like told here:
 # http://www.debian.org/doc/debian-policy/ch-opersys.html#s9.3.3.2
 if which invoke-rc.d >/dev/null 2>&1; then
-    invoke-rc.d dnsmasq restart
+    sudo invoke-rc.d dnsmasq restart
 else
-    /etc/init.d/dnsmasq restart
+    sudo /etc/init.d/dnsmasq restart
 fi
 
 # SQUID
@@ -79,7 +82,7 @@ if which initctl && initctl --version | grep -i upstart
     # use Upstart-Stop only if squid is up!
     if ps aux | grep squid | grep -v grep
         then
-        initctl stop squid
+        sudo initctl stop squid
         # then wait and check if squid is finally down
         sleep 5
         while ps aux | grep squid | grep -v grep
@@ -93,15 +96,15 @@ if which initctl && initctl --version | grep -i upstart
     sleep 1
     echo "starting squid..."
     # ...at least starting is easy
-    initctl start squid
+    sudo initctl start squid
 else
     echo "no upstart installed, try use init script..."
     # should try invoke-rc.d, like told here:
     # http://www.debian.org/doc/debian-policy/ch-opersys.html#s9.3.3.2
     if which invoke-rc.d >/dev/null 2>&1; then
-        invoke-rc.d squid restart
+        sudo invoke-rc.d squid restart
     else
-        /etc/init.d/squid restart
+        sudo /etc/init.d/squid restart
     fi
 fi
 

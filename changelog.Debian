@@ -1,3 +1,13 @@
+nayaboh (0.4-7) unstable; urgency=low
+
+  * moved setup to postinst
+  * massive changes and bugfixes in setup
+  * diverse small bugfixes and comments
+  * made some testing on Ubuntu 10.04
+  * Debian Lenny works fine on commandline
+
+ -- Boris Däppen <boris_daeppen@bluewin.ch>  Sun, 18 Jul 2010 00:00:00 +0000
+
 nayaboh (0.4-6) unstable; urgency=low
 
   * nearly lintian conform

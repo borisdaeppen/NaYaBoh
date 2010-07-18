@@ -71,7 +71,7 @@ say "squid_memory=$squid_memory MB"
 # backup original squid config file
 cp -v /etc/squid/squid.conf /etc/squid/squid.conf_$BACKUP 2>&1 >> $LOGFILE
 # bring the oldest (original) back in place
-cat $(ls -1rt /etc/squid/squid.conf_BACKUP* | head -1) > /etc/squid/squid.conf
+cat $(ls -1rt /etc/squid/squid.conf_BACKUP* | head -n 1) > /etc/squid/squid.conf
 # add nayaboh config to beginning of squid.conf
 # because acl deny in the middle of conf file
 sed -i "1icache_dir ufs /var/spool/squid $squid_disk 16 256" /etc/squid/squid.conf
@@ -113,7 +113,7 @@ iface eth1 inet static
 # APTITUDE
 echo "### configuring software sources" 2>&1 >> $LOGFILE
 cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP 2>&1 >> $LOGFILE
-cat $(ls -1rt /etc/apt/sources.list_BACKUP* | tail -1) | egrep -v "^#|updates|security" | sort -u > /etc/apt/sources.list 2>&1 >> $LOGFILE
+cat $(ls -1rt /etc/apt/sources.list_BACKUP* | head -n 1) | egrep -v "^#|updates|security" | sort -u > /etc/apt/sources.list
 
 ####################
 # RESTART SERVICES #
