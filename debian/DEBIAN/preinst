@@ -32,7 +32,7 @@ if which initctl && initctl --version | grep -i upstart
     # use Upstart-Stop only if squid is up!
     if ps aux | grep squid | grep -v grep
         then
-        initctl stop squid
+        service squid stop
         # then wait and check if squid is finally down
         sleep 5
         while ps aux | grep squid | grep -v grep

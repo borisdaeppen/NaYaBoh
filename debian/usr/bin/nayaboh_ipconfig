@@ -82,7 +82,7 @@ if which initctl && initctl --version | grep -i upstart
     # use Upstart-Stop only if squid is up!
     if ps aux | grep squid | grep -v grep
         then
-        sudo initctl stop squid
+        sudo service squid stop
         # then wait and check if squid is finally down
         sleep 5
         while ps aux | grep squid | grep -v grep
@@ -96,7 +96,7 @@ if which initctl && initctl --version | grep -i upstart
     sleep 1
     echo "starting squid..."
     # ...at least starting is easy
-    sudo initctl start squid
+    sudo service squid start
 else
     echo "no upstart installed, try use init script..."
     # should try invoke-rc.d, like told here:

@@ -1,3 +1,9 @@
+nayaboh (0.4.1-1) unstable; urgency=low
+
+  * Urgent bugfix for Ubuntu 9.04 concerning Upstart
+
+ -- Boris Däppen <boris_daeppen@bluewin.ch>  Sun, 20 Jul 2010 00:00:00 +0000
+
 nayaboh (0.4-7) unstable; urgency=low
 
   * moved setup to postinst
