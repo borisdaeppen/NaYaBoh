@@ -57,3 +57,6 @@ rm debian/usr/share/man/man1/nayaboh*.1.gz
 rm debian/usr/share/doc/nayaboh/changelog.gz
 rm debian/usr/share/doc/nayaboh/changelog.Debian.gz
 
+echo 'DONE'
+echo "don't forget to check the package with lintian!"
+
