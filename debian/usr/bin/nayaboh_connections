@@ -71,3 +71,9 @@ while (my ($ip,$count) = each %connection) {
 }
 print "\nTotal connections open: $ctrl_grep\n\n"
 
+# If there is ANY cmdline arg we only close after ENTER pressed
+if (exists $ARGV[0]) {
+    print "Please press ENTER to close the window\n";
+    <>;
+}
+
