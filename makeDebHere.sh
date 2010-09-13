@@ -17,9 +17,18 @@
 # You should have received a copy of the GNU General Public License
 # along with NaYaBoh.  If not, see <http://www.gnu.org/licenses/>.
 
+##################
+# START BUILDING #
+##################
 
 # remove old packages
 rm nayaboh*.deb 2> /dev/null
+
+#################
+# BUILD NAYABOH #
+#################
+
+echo 'START NAYABOH PACKAGE'
 
 # pack manpage
 mkdir -p debian/usr/share/man/man1
@@ -33,7 +42,7 @@ gzip --best debian/usr/share/doc/nayaboh/changelog
 gzip --best debian/usr/share/doc/nayaboh/changelog.Debian
 
 # update md5sums file of dep-tree
-echo "update md5sums file"
+echo -e "\tupdate md5sums file"
 rm debian/DEBIAN/md5sums
 for i in $( find debian/usr/ -type f ); do
         md5sum $i | sed -e "s/debian\///g" >> debian/DEBIAN/md5sums
@@ -44,7 +53,7 @@ sed -i '/Installed-Size/ d' debian/DEBIAN/control # delete
 echo "Installed-Size: $(du -s --exclude DEBIAN debian/ | cut -f1)" >> debian/DEBIAN/control
 
 # create deb package
-echo "build package"
+echo -e "\tbuild package"
 fakeroot dpkg-deb --build debian \
 $( grep Package debian/DEBIAN/control | cut -d" " -f2 )_\
 $( grep Version debian/DEBIAN/control | cut -d" " -f2 )_\
@@ -57,6 +66,42 @@ rm debian/usr/share/man/man1/nayaboh*.1.gz
 rm debian/usr/share/doc/nayaboh/changelog.gz
 rm debian/usr/share/doc/nayaboh/changelog.Debian.gz
 
+#####################
+# BUILD NAYABOH-GUI #
+#####################
+
+echo 'START NAYABOH-GUI PACKAGE'
+
+#pack changelog
+cp changelog debian-gui/usr/share/doc/nayaboh-gui/
+cp changelog.Debian debian-gui/usr/share/doc/nayaboh-gui/
+gzip --best debian-gui/usr/share/doc/nayaboh-gui/changelog
+gzip --best debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian
+
+# update md5sums file of dep-tree
+echo -e "\tupdate md5sums file"
+rm debian-gui/DEBIAN/md5sums
+for i in $( find debian-gui/usr/ -type f ); do
+        md5sum $i | sed -e "s/debian-gui\///g" >> debian-gui/DEBIAN/md5sums
+done
+
+# renew the size information
+sed -i '/Installed-Size/ d' debian-gui/DEBIAN/control # delete
+echo "Installed-Size: $(du -s --exclude DEBIAN debian-gui/ | cut -f1)" >> debian-gui/DEBIAN/control
+
+# create deb package
+echo -e "\tbuild package"
+fakeroot dpkg-deb --build debian-gui \
+$( grep Package debian-gui/DEBIAN/control | cut -d" " -f2 )_\
+$( grep Version debian-gui/DEBIAN/control | cut -d" " -f2 )_\
+$( grep Architecture debian-gui/DEBIAN/control | cut -d" " -f2 )\
+.deb
+
+# remove packed things,
+# I don't need it in src
+rm debian-gui/usr/share/doc/nayaboh-gui/changelog.gz
+rm debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian.gz
+
 echo 'DONE'
-echo "don't forget to check the package with lintian!"
+echo "don't forget to check the packages with lintian!"
 
