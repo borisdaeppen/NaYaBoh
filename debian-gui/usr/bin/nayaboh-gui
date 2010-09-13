@@ -1,0 +1,218 @@
+#!/usr/bin/perl
+
+# Copyright 2010 Boris Daeppen <boris_daeppen@bluewin.ch>
+# 
+# This file is part of NaYaBoh.
+# 
+# NaYaBoh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# NaYaBoh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with NaYaBoh.  If not, see <http://www.gnu.org/licenses/>.
+
+use strict;
+use warnings;
+use Switch;
+
+# this is to enable listening on ENTER
+use Gtk2::Gdk::Keysyms;
+use Glib qw(TRUE FALSE);
+
+# we initialise GTK for the GUI
+use Gtk2 -init;
+
+# GLOBAL VAR: here we store the choosen radio button
+my $choosen_option = 'benchmark';
+
+# Create main containers #
+##########################
+my $window = Gtk2::Window->new ('toplevel');
+$window->set_title('NaYaBoh');
+$window->signal_connect (delete_event => sub { Gtk2->main_quit });
+$window->signal_connect ('key-press-event' => \&on_key_pressed );
+
+my $main_box = Gtk2::VBox->new();
+my $split_box = Gtk2::HBox->new();
+my $right_frame = Gtk2::Frame->new('Description');
+my $left_frame = Gtk2::Frame->new('Options');
+my $right_box = Gtk2::VBox->new(2,10);
+my $left_box = Gtk2::VBox->new(2,10);
+
+# Create menu #
+###############
+my $menubar = Gtk2::MenuBar->new();
+my $menu_file = Gtk2::Menu->new();
+my $menu_help = Gtk2::Menu->new();
+my $menuitem_file = Gtk2::MenuItem->new('File');
+my $menuitem_help = Gtk2::MenuItem->new('Help');
+
+my $menuitem_quit = Gtk2::MenuItem->new('Quit');
+my $menuitem_about = Gtk2::MenuItem->new('About');
+$menuitem_quit->signal_connect(activate => sub { Gtk2->main_quit });
+$menuitem_about->signal_connect(activate => \&on_about_clicked );
+
+$menu_file->add($menuitem_quit);
+$menu_help->add($menuitem_about);
+
+$menuitem_file->set_submenu($menu_file);
+$menuitem_help->set_submenu($menu_help);
+
+$menubar->add($menuitem_file);
+$menubar->add($menuitem_help);
+
+# Description Label #
+#####################
+my $description = Gtk2::Label->new ("This is the start panel for available GUI's of NaYaBoh. Klick one of the options to get more information.\n\nTo run it, press enter or the button.");
+$description->set_line_wrap(1);
+$right_box->add($description);
+
+# Create Radio-Button menu #
+############################
+my @radio_label = ( 'benchmark',
+                    'connections',
+                    'firewall',
+                    'ipconfig');
+my $radio_group = undef;
+
+# create radio button dynamicaly
+foreach my $name (@radio_label) {
+    my $radio_button = Gtk2::RadioButton->new($radio_group, $name);
+    $radio_group = $radio_button->get_group();
+    $radio_button->signal_connect(
+        toggled => sub {
+            if($radio_button->get_active()) {
+                print "$name choosen\n";
+                $choosen_option = $name;
+                change_description();
+            }
+        }
+    );
+    # add the buttons to the GUI
+    $left_box->add($radio_button);
+}
+
+# Start Button #
+################
+my $button_run = Gtk2::Button->new('run program');
+$left_box->add($button_run);
+$button_run->signal_connect(clicked => \&start );
+
+# Put GUI together #
+####################
+$right_frame->add($right_box);
+$left_frame->add($left_box);
+
+$split_box->add($right_frame);
+$split_box->add($left_frame);
+
+$main_box->add($menubar);
+$main_box->add($split_box);
+$main_box->add(Gtk2::Statusbar->new());
+ 
+$window->add($main_box);
+$window->show_all;
+
+# run main loop #
+#################
+Gtk2->main;
+
+
+###############
+# SUBROUTINES #
+###############
+
+# run choosen programs
+sub start {
+
+    switch ($choosen_option) {
+        case 'benchmark'    { print "EXECUTE $choosen_option\n" }
+        case 'connections'  { print "EXECUTE $choosen_option\n" }
+        case 'firewall'     { print "EXECUTE $choosen_option\n" }
+        case 'ipconfig'     { print "EXECUTE $choosen_option\n" }
+        else                { print "something is wrong...\n" }
+    }
+}
+
+# change the text of the description window
+sub change_description {
+
+    switch ($choosen_option) {
+        case 'benchmark'    { $description->set_text(
+        "Create a picture of how fast your NaYaBoh is!
+        This program will download several websites from the Internet and compare how much faster NaYaBoh is to a normal setup.")
+        }
+        case 'connections'  { $description->set_text(
+        "See all your connected Computers and their ressources.
+        All connected Computers are listed with their IP. You can also see how many connections to the Internet are opened by them.")
+        }
+        case 'firewall'     { $description->set_text(
+        "Block certain Computers.
+        Somethimes Computer missuse your Internet connection, often due to viruses. You can block them so that they downt slow down the Internet for other users.")
+        }
+        case 'ipconfig'     { $description->set_text(
+        "Change the setup of your internal network.
+        You may wish to configure your internal network to a certain subnet. This tool helps you to achieve this.")
+        }
+        else                { print "something is wrong...\n" }
+    }
+}
+
+# Display a small window with information
+sub on_about_clicked {
+    print "About clicked\n";
+    
+    my $text = "<b>NaYaBoh</b>
+<i>Set up a very simple internet server.</i>
+
+Copyright (C) 2010 Boris Daeppen &lt;boris_daeppen\@bluewin.ch&gt;
+
+<small>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;</small>
+
+For further information see also:
+http://nayaboh.sourceforge.net/";
+
+    # Create a MessageDialog with Pango-Markup
+    my $dialog = Gtk2::MessageDialog->new_with_markup ($window, 'destroy-with-parent', 'info', 'ok', $text);
+    my $response = $dialog->run;
+    print "$response\n";
+    $dialog->destroy;
+
+}
+
+# handle the key RETURN like the run button
+sub on_key_pressed {
+    my ($widget, $event,$parameter)= @_;
+
+    my $key_nr = $event->keyval();
+    foreach my $key  (keys %Gtk2::Gdk::Keysyms){
+        
+        my $key_compare = $Gtk2::Gdk::Keysyms{$key};
+                
+        if($key_compare == $key_nr){
+            if ($key =~ /Return/) {
+                start();
+            }
+            last;
+        }
+    }
+    return FALSE;
+}
+
