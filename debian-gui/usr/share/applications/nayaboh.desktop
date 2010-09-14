@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=NaYaBoh
+Comment=GUI-collection for the nayaboh commandline tools
+Terminal=false
+Exec=sudo /usr/bin/nayaboh-gui
+Icon=/usr/share/icons/nayaboh48x48.png
+Type=Application
+Categories=System;

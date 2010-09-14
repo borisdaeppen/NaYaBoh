@@ -132,10 +132,10 @@ Gtk2->main;
 sub start {
 
     switch ($choosen_option) {
-        case 'benchmark'    { print "EXECUTE $choosen_option\n" }
-        case 'connections'  { print "EXECUTE $choosen_option\n" }
-        case 'firewall'     { print "EXECUTE $choosen_option\n" }
-        case 'ipconfig'     { print "EXECUTE $choosen_option\n" }
+        case 'benchmark'    { run_dialog_benchmark() }
+        case 'connections'  { run_dialog_connections() }
+        case 'firewall'     { run_dialog_firewall() }
+        case 'ipconfig'     { run_dialog_ipconfig() }
         else                { print "something is wrong...\n" }
     }
 }
@@ -214,5 +214,70 @@ sub on_key_pressed {
         }
     }
     return FALSE;
+}
+
+# IMPLEMENTED PROGRAMS #
+########################
+
+sub run_dialog_benchmark {
+
+    # create a new dialog with some buttons - one stock, one not.
+    my $dialog = Gtk2::Dialog->new (   'NaYaBoh Benchmark',
+                                    $window,
+                                    [qw/modal destroy-with-parent/],
+                                    'gtk-cancel' => 'cancel',
+                                    'Do it'      => 'ok');
+
+    # create window contents for yourself.
+    my $label = Gtk2::Label->new('Create a benchmark picture.');
+    $label->set_line_wrap(1);
+
+    my $sort = Gtk2::CheckButton->new_with_label ('sort values by size');
+
+    my $entry = Gtk2::Entry->new();
+    $entry->set_text('3');
+
+    my $text_box = Gtk2::HBox->new();
+    $text_box->add(Gtk2::Label->new('Number of cycles:'));
+    $text_box->add($entry);
+
+    $dialog->get_content_area ()->add ($label);
+    $dialog->get_content_area ()->add ($sort);
+    $dialog->get_content_area ()->add ($text_box);
+    $dialog->show_all();
+
+    # event handling
+    $dialog->set_default_response ('ok');
+
+    my $response = $dialog->run;
+    if ($response eq 'ok') {
+
+        my $cycle = $entry->get_text();
+        unless ($cycle =~ /^\d{1}$/) {
+            print "wrong input, defaulting to 3...\n";
+            $cycle = 3;
+        }
+
+        my $option = '-s';
+        unless ($sort->get_active()) { $option = ''; }
+
+        my $command = "nayaboh_benchmark $cycle $option";
+        print "trying to execute '$command'\n";
+        `$command`;
+        # TODO: It would be nice if there is a dialog saying that
+        # the process will need some time!
+    }
+
+    $dialog->destroy;
+
+}
+
+sub run_dialog_connections {
+}
+
+sub run_dialog_firewall {
+}
+
+sub run_dialog_ipconfig {
 }
 

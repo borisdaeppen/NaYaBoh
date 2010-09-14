@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=NaYaBoh Connections
-Comment=list the computers connected to the Internet
-Terminal=true
-Exec=/usr/bin/nayaboh_connections --noclose
-Icon=/usr/share/icons/nayaboh48x48.png
-Type=Application
-Categories=System;

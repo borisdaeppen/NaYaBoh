@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=NaYaBoh Network
-Comment=change the internal IP network
-Terminal=true
-Exec=/usr/bin/nayaboh_ipconfig --noclose
-Icon=/usr/share/icons/nayaboh48x48.png
-Type=Application
-Categories=System;

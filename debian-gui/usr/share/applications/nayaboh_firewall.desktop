@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=NaYaBoh Firewall
-Comment=block certain computers from Internet access
-Terminal=true
-Exec=/usr/bin/nayaboh_firewall --noclose
-Icon=/usr/share/icons/nayaboh48x48.png
-Type=Application
-Categories=System;
