@@ -281,3 +281,33 @@ sub run_dialog_firewall {
 sub run_dialog_ipconfig {
 }
 
+__END__
+
+=head1 NAME
+
+nayaboh_gui - small Gtk2 GUI for the nayaboh package.
+
+=head1 SYNOPSIS
+
+No arguments supported. Run the script to start the GUI.
+
+=head1 DESCRIPTION
+
+This script belongs to the nayaboh package. It creates a simple GUI for some scripts of the nayaboh package.
+
+NOTE: Not all the scripts are supported with this GUI. To see all the available scripts, read the web documentation.
+
+=head1 LICENSE
+
+This script is released under the GPL version 3.
+
+=head1 AUTHOR
+
+Boris Daeppen - boris_daeppen@bluewin.ch
+
+=head1 SEE ALSO
+
+L<http://sourceforge.net/projects/nayaboh>, L<http://nayaboh.sourceforge.net>
+
+=cut
+
