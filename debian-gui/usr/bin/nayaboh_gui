@@ -29,7 +29,7 @@ use Glib qw(TRUE FALSE);
 use Gtk2 -init;
 
 # GLOBAL VAR: here we store the choosen radio button
-my $choosen_option = 'benchmark';
+my $choosen_option = 'help';
 
 # Create main containers #
 ##########################
@@ -69,16 +69,19 @@ $menubar->add($menuitem_help);
 
 # Description Label #
 #####################
-my $description = Gtk2::Label->new ("This is the start panel for available GUI's of NaYaBoh. Klick one of the options to get more information.\n\nTo run it, press enter or the button.");
+my $help_descr = "This is the start panel for available GUI's of NaYaBoh. Klick one of the options to get more information.\n\nTo run it, press enter or the button.";
+my $description = Gtk2::Label->new ($help_descr);
 $description->set_line_wrap(1);
 $right_box->add($description);
 
 # Create Radio-Button menu #
 ############################
-my @radio_label = ( 'benchmark',
+my @radio_label = ( 'help',
+                    'benchmark',
                     'connections',
-                    'firewall',
-                    'ipconfig');
+#                    'firewall',
+#                    'ipconfig',
+                    );
 my $radio_group = undef;
 
 # create radio button dynamicaly
@@ -132,10 +135,11 @@ Gtk2->main;
 sub start {
 
     switch ($choosen_option) {
+        case 'help'         { run_dialog_help() }
         case 'benchmark'    { run_dialog_benchmark() }
         case 'connections'  { run_dialog_connections() }
-        case 'firewall'     { run_dialog_firewall() }
-        case 'ipconfig'     { run_dialog_ipconfig() }
+#        case 'firewall'     { run_dialog_firewall() }
+#        case 'ipconfig'     { run_dialog_ipconfig() }
         else                { print "something is wrong...\n" }
     }
 }
@@ -144,22 +148,19 @@ sub start {
 sub change_description {
 
     switch ($choosen_option) {
-        case 'benchmark'    { $description->set_text(
-        "Create a picture of how fast your NaYaBoh is!
-        This program will download several websites from the Internet and compare how much faster NaYaBoh is to a normal setup.")
+        case 'help'         { $description->set_text($help_descr) }
+        case 'benchmark'    { $description->set_markup(
+        '<b>Create a picture of how fast your NaYaBoh is!</b> This program will download several websites from the Internet and compare how much faster NaYaBoh is to a normal setup.')
         }
-        case 'connections'  { $description->set_text(
-        "See all your connected Computers and their ressources.
-        All connected Computers are listed with their IP. You can also see how many connections to the Internet are opened by them.")
+        case 'connections'  { $description->set_markup(
+        '<b>See all your connected Computers and their ressources.</b> All connected Computers are listed with their IP. You can also see how many connections to the Internet are opened by them.')
         }
-        case 'firewall'     { $description->set_text(
-        "Block certain Computers.
-        Somethimes Computer missuse your Internet connection, often due to viruses. You can block them so that they downt slow down the Internet for other users.")
-        }
-        case 'ipconfig'     { $description->set_text(
-        "Change the setup of your internal network.
-        You may wish to configure your internal network to a certain subnet. This tool helps you to achieve this.")
-        }
+#        case 'firewall'     { $description->set_markup(
+#        '<b>Block certain Computers.</b> Somethimes Computer missuse your Internet connection, often due to viruses. You can block them so that they downt slow down the Internet for other users.')
+#        }
+#        case 'ipconfig'     { $description->set_markup(
+#        '<b>Change the setup of your internal network.</b> You may wish to configure your internal network to a certain subnet. This tool helps you to achieve this.')
+#        }
         else                { print "something is wrong...\n" }
     }
 }
@@ -219,18 +220,50 @@ sub on_key_pressed {
 # IMPLEMENTED PROGRAMS #
 ########################
 
-sub run_dialog_benchmark {
+sub create_dialog {
+    my ($title, $desc) = @_;
 
-    # create a new dialog with some buttons - one stock, one not.
-    my $dialog = Gtk2::Dialog->new (   'NaYaBoh Benchmark',
+    # create a new dialog with some buttons
+    my $dialog = Gtk2::Dialog->new ($title,
                                     $window,
                                     [qw/modal destroy-with-parent/],
                                     'gtk-cancel' => 'cancel',
-                                    'Do it'      => 'ok');
+                                    'gtk-ok'     => 'ok');
 
-    # create window contents for yourself.
-    my $label = Gtk2::Label->new('Create a benchmark picture.');
+    $dialog->set_default_response ('ok');
+
+    # create window contents
+    my $label = Gtk2::Label->new();
     $label->set_line_wrap(1);
+    $label->set_markup($desc);
+
+    $dialog->get_content_area ()->add ($label);
+    $dialog->get_content_area ()->add (Gtk2::HSeparator->new());
+
+    return \$dialog;
+}
+
+sub run_dialog_help {
+
+    my $dialog = ${create_dialog('NaYaBoh Help',
+    '<b>For you Information.</b>'
+    )};
+
+    my $txt = "Not all tools which are available for NaYaBoh have a graphical version. So this programs you can see here are just a few of them. Please check the homepage at http://nayaboh.sourceforge.net for information.";
+    my $label = Gtk2::Label->new($txt);
+    $label->set_line_wrap(1);
+    $dialog->get_content_area ()->add ($label);
+
+    $dialog->show_all();
+    $dialog->run;
+    $dialog->destroy;
+}
+
+sub run_dialog_benchmark {
+
+    my $dialog = ${create_dialog('NaYaBoh Benchmark',
+    '<b>Create a benchmark picture.</b> NOTE: this may take several minutes! The dialog should close after the work is done.'
+    )};
 
     my $sort = Gtk2::CheckButton->new_with_label ('sort values by size');
 
@@ -241,14 +274,11 @@ sub run_dialog_benchmark {
     $text_box->add(Gtk2::Label->new('Number of cycles:'));
     $text_box->add($entry);
 
-    $dialog->get_content_area ()->add ($label);
     $dialog->get_content_area ()->add ($sort);
     $dialog->get_content_area ()->add ($text_box);
     $dialog->show_all();
 
     # event handling
-    $dialog->set_default_response ('ok');
-
     my $response = $dialog->run;
     if ($response eq 'ok') {
 
@@ -264,8 +294,7 @@ sub run_dialog_benchmark {
         my $command = "nayaboh_benchmark $cycle $option";
         print "trying to execute '$command'\n";
         `$command`;
-        # TODO: It would be nice if there is a dialog saying that
-        # the process will need some time!
+        # TODO: Progress bar would be nice...
     }
 
     $dialog->destroy;
@@ -273,11 +302,47 @@ sub run_dialog_benchmark {
 }
 
 sub run_dialog_connections {
+
+    my $dialog = ${create_dialog('NaYaBoh Connections',
+    '<b>Open Internet connections.</b>'
+    )};
+
+    my $result = `nayaboh_connections`;
+
+    $dialog->get_content_area ()->add (Gtk2::Label->new($result));
+    $dialog->show_all();
+
+    $dialog->run;
+    $dialog->destroy;
 }
 
-sub run_dialog_firewall {
-}
-
-sub run_dialog_ipconfig {
-}
+#sub run_dialog_firewall {
+#
+#    my $dialog = ${create_dialog('NaYaBoh Firewall',
+#    '<b>A.</b> B.'
+#    )};
+#
+#    $dialog->show_all();
+#
+#    my $response = $dialog->run;
+#    if ($response eq 'ok') {
+#    }
+#
+#    $dialog->destroy;
+#}
+#
+#sub run_dialog_ipconfig {
+#
+#    my $dialog = ${create_dialog('NaYaBoh IPconfig',
+#    '<b>A.</b> B.'
+#    )};
+#
+#    $dialog->show_all();
+#
+#    my $response = $dialog->run;
+#    if ($response eq 'ok') {
+#    }
+#
+#    $dialog->destroy;
+#}
 
