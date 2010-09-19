@@ -71,3 +71,31 @@ while (my ($ip,$count) = each %connection) {
 }
 print "\nTotal connections open: $ctrl_grep\n\n";
 
+__END__
+
+=head1 NAME
+
+nayaboh_connections - list routed IP addresses
+
+=head1 SYNOPSIS
+
+Use this script on command line.
+
+=head1 DESCRIPTION
+
+This script belongs to the nayaboh package. It lists the routed IP addresses - and the amount of open connections.
+
+=head1 LICENSE
+
+This script is released under the GPL version 3.
+
+=head1 AUTHOR
+
+Boris Daeppen - boris_daeppen@bluewin.ch
+
+=head1 SEE ALSO
+
+L<http://sourceforge.net/projects/nayaboh>, L<http://nayaboh.sourceforge.net>
+
+=cut
+

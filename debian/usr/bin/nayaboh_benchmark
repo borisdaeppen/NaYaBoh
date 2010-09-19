@@ -199,3 +199,42 @@ sub ask_internet {
 # {
 #   die "Could not get content";
 # }
+
+__END__
+
+=head1 NAME
+
+nayaboh_benchmark - a proxy benchmark script
+
+=head1 SYNOPSIS
+
+Use this script on command line.
+
+This creates an average graphic:
+
+    nayaboh_benchmark 3
+
+If you want to have an ordered graph, add an option:
+
+    nayaboh_benchmar 3 -s
+
+=head1 DESCRIPTION
+
+This script belongs to the nayaboh package. It tests the local installed internet proxy and creates a graphic out of the results. It does so, by downloading webpages.
+
+NOTE: At this version the env $http_proxy is set to a certain value. So it only works with the nayaboh-package. This is a TODO and should be changed in later versions.
+
+=head1 LICENSE
+
+This script is released under the GPL version 3.
+
+=head1 AUTHOR
+
+Boris Daeppen - boris_daeppen@bluewin.ch
+
+=head1 SEE ALSO
+
+L<http://sourceforge.net/projects/nayaboh>, L<http://nayaboh.sourceforge.net>
+
+=cut
+
