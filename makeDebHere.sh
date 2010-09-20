@@ -32,7 +32,13 @@ echo 'START NAYABOH PACKAGE'
 
 # pack manpage
 mkdir -p debian/usr/share/man/man1
-cp documentation/manpage/nayaboh*.1 debian/usr/share/man/man1/
+cp documentation/manpage/nayaboh.1 debian/usr/share/man/man1/
+cp documentation/manpage/nayaboh_benchmark.1 debian/usr/share/man/man1/
+cp documentation/manpage/nayaboh_connections.1 debian/usr/share/man/man1/
+cp documentation/manpage/nayaboh_firewall.1 debian/usr/share/man/man1/
+cp documentation/manpage/nayaboh_ipconfig.1 debian/usr/share/man/man1/
+cp documentation/manpage/nayaboh_installreport.1 debian/usr/share/man/man1/
+cp documentation/manpage/nayaboh_proxylog.1 debian/usr/share/man/man1/
 gzip --best debian/usr/share/man/man1/nayaboh*.1
 
 #pack changelog
@@ -44,8 +50,9 @@ gzip --best debian/usr/share/doc/nayaboh/changelog.Debian
 # update md5sums file of dep-tree
 echo -e "\tupdate md5sums file"
 rm debian/DEBIAN/md5sums
-for i in $( find debian/usr/ -type f ); do
-        md5sum $i | sed -e "s/debian\///g" >> debian/DEBIAN/md5sums
+for i in $( find ./debian -path ./debian/DEBIAN -prune -o -type f -print)
+do
+    md5sum $i | sed -e "s/\.\/debian\///g" >> debian/DEBIAN/md5sums
 done
 
 # renew the size information
@@ -72,6 +79,11 @@ rm debian/usr/share/doc/nayaboh/changelog.Debian.gz
 
 echo 'START NAYABOH-GUI PACKAGE'
 
+# pack manpage
+mkdir -p debian-gui/usr/share/man/man1
+cp documentation/manpage/nayaboh_gui.1 debian-gui/usr/share/man/man1/
+gzip --best debian-gui/usr/share/man/man1/nayaboh*.1
+
 #pack changelog
 cp changelog debian-gui/usr/share/doc/nayaboh-gui/
 cp changelog.Debian debian-gui/usr/share/doc/nayaboh-gui/
@@ -81,8 +93,9 @@ gzip --best debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian
 # update md5sums file of dep-tree
 echo -e "\tupdate md5sums file"
 rm debian-gui/DEBIAN/md5sums
-for i in $( find debian-gui/usr/ -type f ); do
-        md5sum $i | sed -e "s/debian-gui\///g" >> debian-gui/DEBIAN/md5sums
+for i in $( find ./debian-gui -path ./debian-gui/DEBIAN -prune -o -type f -print)
+do
+    md5sum $i | sed -e "s/\.\/debian-gui\///g" >> debian-gui/DEBIAN/md5sums
 done
 
 # renew the size information
@@ -99,6 +112,7 @@ $( grep Architecture debian-gui/DEBIAN/control | cut -d" " -f2 )\
 
 # remove packed things,
 # I don't need it in src
+rm debian-gui/usr/share/man/man1/nayaboh*.1.gz
 rm debian-gui/usr/share/doc/nayaboh-gui/changelog.gz
 rm debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian.gz
 
