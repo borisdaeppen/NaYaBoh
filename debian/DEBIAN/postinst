@@ -44,17 +44,18 @@ say ""
 # enable the routing machanism of the linux kernel
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 
-# enable NAT and foreward http to the squid proxy
 say "### configuring routing"
-cp -v /etc/rc.local /etc/rc.local_$BACKUP 2>&1 >> $LOGFILE
-echo '#!/bin/sh -e
-# THIS SCRIPT WAS ALTERED BY NAYABOH
-# internet gateway routing
+# enable NAT and foreward http to the squid proxy
 iptables -P FORWARD ACCEPT
 iptables --table nat -A POSTROUTING -o eth0 -j MASQUERADE
 # proxy trancparency
 iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 80 -j REDIRECT --to-port 3128
-exit 0' > /etc/rc.local
+RULES=$(iptables-save)
+
+echo -e "#!/bin/sh -e
+echo -e '$RULES' | iptables-restore
+exit 0" > /etc/network/if-up.d/nayaboh-iptables
+chmod +x /etc/network/if-up.d/nayaboh-iptables
 
 # SQUID
 say "### configuring squid proxy"
@@ -119,7 +120,7 @@ cat $(ls -1rt /etc/apt/sources.list_BACKUP* | head -n 1) | egrep -v "^#|updates|
 # RESTART SERVICES #
 ####################
 
-# NETWORK
+# NETWORK (executes also iptables script)
 say "### restart network interfaces"
 ifdown eth0 2>&1 >> $LOGFILE
 ifdown eth1 2>&1 >> $LOGFILE
@@ -176,11 +177,6 @@ else
         /etc/init.d/squid restart 2>&1 >> $LOGFILE
     fi
 fi
-
-# IPTABLES
-say "### execute iptables in /etc/rc.local"
-# I heard there is a cleaner way doing this...
-bash /etc/rc.local 2>&1 >> $LOGFILE
 
 # I would like to update the package chache
 # but I can't since I myself block it :-)
