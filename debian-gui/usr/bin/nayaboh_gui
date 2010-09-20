@@ -316,36 +316,35 @@ sub run_dialog_connections {
     $dialog->destroy;
 }
 
-<<<<<<< HEAD:debian-gui/usr/bin/nayaboh_gui
-#sub run_dialog_firewall {
-#
-#    my $dialog = ${create_dialog('NaYaBoh Firewall',
-#    '<b>A.</b> B.'
-#    )};
-#
-#    $dialog->show_all();
-#
-#    my $response = $dialog->run;
-#    if ($response eq 'ok') {
-#    }
-#
-#    $dialog->destroy;
-#}
-#
-#sub run_dialog_ipconfig {
-#
-#    my $dialog = ${create_dialog('NaYaBoh IPconfig',
-#    '<b>A.</b> B.'
-#    )};
-#
-#    $dialog->show_all();
-#
-#    my $response = $dialog->run;
-#    if ($response eq 'ok') {
-#    }
-#
-#    $dialog->destroy;
-#}
+sub run_dialog_firewall {
+
+    my $dialog = ${create_dialog('NaYaBoh Firewall',
+    '<b>A.</b> B.'
+    )};
+
+    $dialog->show_all();
+
+    my $response = $dialog->run;
+    if ($response eq 'ok') {
+    }
+
+    $dialog->destroy;
+}
+
+sub run_dialog_ipconfig {
+
+    my $dialog = ${create_dialog('NaYaBoh IPconfig',
+    '<b>A.</b> B.'
+    )};
+
+    $dialog->show_all();
+
+    my $response = $dialog->run;
+    if ($response eq 'ok') {
+    }
+
+    $dialog->destroy;
+}
 
 __END__
 
