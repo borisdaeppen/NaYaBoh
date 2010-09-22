@@ -5,6 +5,7 @@ nayaboh (0.4.2) unstable; urgency=low
   * ipatbles NAT is now the debian way
   * added few POD
   * small file-cleanup after uninstall
+  * introduced gksudo for gui scripts
 
  -- Boris Däppen <boris_daeppen@bluewin.ch>  Wed, 22 Sep 2010 00:00:00 +0000
 
