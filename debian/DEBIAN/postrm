@@ -1,0 +1,39 @@
+#!/bin/bash -e
+
+# Copyright 2010 Boris Daeppen <boris_daeppen@bluewin.ch>
+# 
+# This file is part of NaYaBoh.
+# 
+# NaYaBoh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# NaYaBoh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with NaYaBoh.  If not, see <http://www.gnu.org/licenses/>.
+
+if [ -e /var/log/nayaboh/install.log ]; then
+    rm /var/log/nayaboh/install.log
+    echo "removed /var/log/nayaboh/install.log"
+fi
+
+if [ -d /var/log/nayaboh ]; then
+    rmdir /var/log/nayaboh
+    echo "removed /var/log/nayaboh"
+fi
+
+if [ -e /etc/nayaboh-iptables.up.rules ]; then
+    rm /etc/nayaboh-iptables.up.rules
+    echo "removed /etc/nayaboh-iptables.up.rules"
+fi
+
+if [ -e /etc/network/if-up.d/nayaboh-iptables ]; then
+    rm /etc/network/if-up.d/nayaboh-iptables
+    echo "removed /etc/network/if-up.d/nayaboh-iptables"
+fi
+
