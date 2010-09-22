@@ -1,11 +1,11 @@
 Package: nayaboh-gui
-Version: 0.4.1-1
+Version: 0.1
 Section: utils
 Priority: extra
 Architecture: all
-Depends: nayaboh, perl, libgtk2-perl
+Depends: nayaboh (>= 0.4.2), perl, libgtk2-perl
 Maintainer: Boris Däppen <boris_daeppen@bluewin.ch>
 Description: graphical frontend for the package nayaboh
  This package provides a graphical frontend (GUI) for
  the NaYaBoh tools.
-Installed-Size: 72
+Installed-Size: 80

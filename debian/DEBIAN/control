@@ -1,5 +1,5 @@
 Package: nayaboh
-Version: 0.4.1-1
+Version: 0.4.2
 Section: utils
 Priority: extra
 Architecture: all
@@ -13,4 +13,4 @@ Description: Set up a very simple internet server
  .
  NaYaBoh shares and speeds up slow internet connection to several computers.
  Useful for remote classrooms, cybars or offices.
-Installed-Size: 140
+Installed-Size: 104

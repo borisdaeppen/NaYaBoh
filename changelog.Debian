@@ -1,3 +1,13 @@
+nayaboh (0.4.2) unstable; urgency=low
+
+  * introducing nayaboh-gui package
+  * removed desktop entries completely
+  * ipatbles NAT is now the debian way
+  * added few POD
+  * small file-cleanup after uninstall
+
+ -- Boris Däppen <boris_daeppen@bluewin.ch>  Wed, 22 Sep 2010 00:00:00 +0000
+
 nayaboh (0.4.1-1) unstable; urgency=low
 
   * Urgent bugfix for Ubuntu 9.04 concerning Upstart
