@@ -86,7 +86,7 @@ gzip --best debian-gui/usr/share/man/man1/nayaboh*.1
 
 #pack changelog
 cp changelog debian-gui/usr/share/doc/nayaboh-gui/
-cp changelog.Debian debian-gui/usr/share/doc/nayaboh-gui/
+cp changelog-gui.Debian debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian
 gzip --best debian-gui/usr/share/doc/nayaboh-gui/changelog
 gzip --best debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian
 
