@@ -50,10 +50,11 @@ iptables -P FORWARD ACCEPT
 iptables --table nat -A POSTROUTING -o eth0 -j MASQUERADE
 # proxy trancparency
 iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 80 -j REDIRECT --to-port 3128
-RULES=$(iptables-save)
+
+iptables-save > /etc/nayaboh-iptables.up.rules
 
 echo -e "#!/bin/sh -e
-echo -e '$RULES' | iptables-restore
+iptables-restore < /etc/nayaboh-iptables.up.rules
 exit 0" > /etc/network/if-up.d/nayaboh-iptables
 chmod +x /etc/network/if-up.d/nayaboh-iptables
 
