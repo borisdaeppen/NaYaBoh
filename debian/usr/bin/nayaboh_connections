@@ -26,7 +26,13 @@
 # at the NaYaBoh server              #
 ######################################
 
-my @netstat = `sudo netstat-nat -n`;
+my @netstat;
+if (defined $ENV{'DISPLAY'} and $ENV{'DISPLAY'} =~ /:/) {
+    @netstat = `gksudo 'netstat-nat -n'`;
+}
+else {
+    @netstat = `sudo netstat-nat -n`;
+}
 my %connection;
 
 # fetch the connection data
