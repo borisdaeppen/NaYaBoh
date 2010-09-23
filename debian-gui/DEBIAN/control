@@ -8,4 +8,4 @@ Maintainer: Boris Däppen <boris_daeppen@bluewin.ch>
 Description: graphical frontend for the package nayaboh
  This package provides a graphical frontend (GUI) for the NaYaBoh tools.
  It also contains the official website as a local documentation.
-Installed-Size: 348
+Installed-Size: 324
