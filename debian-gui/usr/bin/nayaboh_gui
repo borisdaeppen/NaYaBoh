@@ -29,7 +29,7 @@ use Glib qw(TRUE FALSE);
 use Gtk2 -init;
 
 # GLOBAL VAR: here we store the choosen radio button
-my $choosen_option = 'help';
+my $choosen_option = 'documentation';
 
 # Create main containers #
 ##########################
@@ -76,7 +76,7 @@ $right_box->add($description);
 
 # Create Radio-Button menu #
 ############################
-my @radio_label = ( 'help',
+my @radio_label = ( 'documentation',
                     'benchmark',
                     'connections',
 #                    'firewall',
@@ -135,7 +135,7 @@ Gtk2->main;
 sub start {
 
     switch ($choosen_option) {
-        case 'help'         { run_dialog_help() }
+        case 'documentation'{ run_dialog_help() }
         case 'benchmark'    { run_dialog_benchmark() }
         case 'connections'  { run_dialog_connections() }
 #        case 'firewall'     { run_dialog_firewall() }
@@ -148,7 +148,7 @@ sub start {
 sub change_description {
 
     switch ($choosen_option) {
-        case 'help'         { $description->set_text($help_descr) }
+        case 'documentation'{ $description->set_text($help_descr) }
         case 'benchmark'    { $description->set_markup(
         '<b>Create a picture of how fast your NaYaBoh is!</b> This program will download several websites from the Internet and compare how much faster NaYaBoh is to a normal setup.')
         }
@@ -244,19 +244,8 @@ sub create_dialog {
 }
 
 sub run_dialog_help {
-
-    my $dialog = ${create_dialog('NaYaBoh Help',
-    '<b>For you Information.</b>'
-    )};
-
-    my $txt = "Not all tools which are available for NaYaBoh have a graphical version. So this programs you can see here are just a few of them. Please check the homepage at http://nayaboh.sourceforge.net for information.";
-    my $label = Gtk2::Label->new($txt);
-    $label->set_line_wrap(1);
-    $dialog->get_content_area ()->add ($label);
-
-    $dialog->show_all();
-    $dialog->run;
-    $dialog->destroy;
+    my $idx = '/usr/share/doc/nayaboh-gui/html/index.html';
+    `firefox $idx || iceweasel $idx || epiphany $idx`;
 }
 
 sub run_dialog_benchmark {

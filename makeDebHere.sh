@@ -90,6 +90,9 @@ cp changelog-gui.Debian debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian
 gzip --best debian-gui/usr/share/doc/nayaboh-gui/changelog
 gzip --best debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian
 
+# add html-documentation to local folder
+cp -r documentation/website debian-gui/usr/share/doc/nayaboh-gui/html
+
 # update md5sums file of dep-tree
 echo -e "\tupdate md5sums file"
 rm debian-gui/DEBIAN/md5sums
@@ -115,6 +118,8 @@ $( grep Architecture debian-gui/DEBIAN/control | cut -d" " -f2 )\
 rm debian-gui/usr/share/man/man1/nayaboh*.1.gz
 rm debian-gui/usr/share/doc/nayaboh-gui/changelog.gz
 rm debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian.gz
+# remove html
+rm -r debian-gui/usr/share/doc/nayaboh-gui/html
 
 echo 'DONE'
 echo "don't forget to check the packages with lintian!"
