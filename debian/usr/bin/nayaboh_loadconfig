@@ -4,6 +4,7 @@ INTERNET=$(grep internet-interface /etc/nayaboh.conf | cut -d\= -f2)
 LOCALNET=$(grep internal-interface /etc/nayaboh.conf | cut -d\= -f2)
 
 echo "INTERNET=$INTERNET LOCALNET=$LOCALNET"
+echo "change /etc/dnsmasq.conf and /etc/nayaboh-iptables.up.rules"
 
 if [ $DISPLAY ]; then
 
@@ -25,6 +26,10 @@ fi
 ####################
 # RESTART SERVICES #
 ####################
+
+# reload iptables
+echo "### reload iptables"
+sudo /etc/network/if-up.d/nayaboh-iptables
 
 # DNSMASQ
 echo "### restart dnsmasq"
