@@ -39,6 +39,7 @@ cp documentation/manpage/nayaboh_firewall.1 debian/usr/share/man/man1/
 cp documentation/manpage/nayaboh_ipconfig.1 debian/usr/share/man/man1/
 cp documentation/manpage/nayaboh_installreport.1 debian/usr/share/man/man1/
 cp documentation/manpage/nayaboh_proxylog.1 debian/usr/share/man/man1/
+cp documentation/manpage/nayaboh_loadconfig.1 debian/usr/share/man/man1/
 gzip --best debian/usr/share/man/man1/nayaboh*.1
 
 #pack changelog
