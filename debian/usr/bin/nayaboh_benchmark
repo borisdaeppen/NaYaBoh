@@ -124,14 +124,18 @@ my $date     = `date`;
 my $uptime   = `uptime | cut -d, -f1 | cut -d' ' -f1-3 --complement`;
 my $RX;
 my $TX;
+# read from config file
+my $internet=`grep internet-interface /etc/nayaboh.conf | cut -d\= -f2`; chomp ($internet);
+my $localnet=`grep internal-interface /etc/nayaboh.conf | cut -d\= -f2`; chomp ($localnet);
+
 if (defined $ENV{'DISPLAY'} and $ENV{'DISPLAY'} =~ /:/) {
 
-    $RX       = `gksudo ifconfig eth0 | grep 'RX bytes' | cut -d: -f2 | cut -d')' -f1 | cut -d'(' -f2`;
-    $TX       = `gksudo ifconfig eth1 | grep 'TX bytes' | cut -d: -f3 | cut -d')' -f1 | cut -d'(' -f2`;
+    $RX       = `gksudo ifconfig $internet | grep 'RX bytes' | cut -d: -f2 | cut -d')' -f1 | cut -d'(' -f2`;
+    $TX       = `gksudo ifconfig $localnet | grep 'TX bytes' | cut -d: -f3 | cut -d')' -f1 | cut -d'(' -f2`;
 }
 else {
-    $RX       = `sudo ifconfig eth0 | grep 'RX bytes' | cut -d: -f2 | cut -d')' -f1 | cut -d'(' -f2`;
-    $TX       = `sudo ifconfig eth1 | grep 'TX bytes' | cut -d: -f3 | cut -d')' -f1 | cut -d'(' -f2`;
+    $RX       = `sudo ifconfig $internet | grep 'RX bytes' | cut -d: -f2 | cut -d')' -f1 | cut -d'(' -f2`;
+    $TX       = `sudo ifconfig $localnet | grep 'TX bytes' | cut -d: -f3 | cut -d')' -f1 | cut -d'(' -f2`;
 }
 my $version  = `dpkg -l nayaboh | tail -n 1 | awk '{ print \$3 }'`;
 chomp ($hostname);
