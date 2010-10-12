@@ -1,25 +1,30 @@
 #!/bin/sh
 
+# read to config file
 INTERNET=$(grep internet-interface /etc/nayaboh.conf | cut -d\= -f2)
 LOCALNET=$(grep internal-interface /etc/nayaboh.conf | cut -d\= -f2)
 
 echo "INTERNET=$INTERNET LOCALNET=$LOCALNET"
 echo "change /etc/dnsmasq.conf and /etc/nayaboh-iptables.up.rules"
 
+# if there is an X-Display we use gksudo, otherwise just use sudo on terminal
 if [ $DISPLAY ]; then
 
+    # change e.g. "interface=eth1" to "interace=eth0", depending on the  nayaboh config file
     gksudo "sed -i 's/^interface=.*/interface=$LOCALNET/g' /etc/dnsmasq.conf"
+    # similar change to a second parameter in dnsmasq.conf
     gksudo "sed -i 's/^no-dhcp-interface=.*/no-dhcp-interface=$INTERNET/g' /etc/dnsmasq.conf"
 
-    # dammit I had problems with this sed-regex, so I just replace the whole line :-/
-    gksudo "sed -i 's/-A PREROUTING -i .* -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 3128/-A PREROUTING -i $LOCALNET -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 3128/g' /etc/nayaboh-iptables.up.rules"
+    # replace the string between -i and -p with the value of the nayaboh config file 
+    gksudo "sed -i 's/-A PREROUTING -i .* -p/-A PREROUTING -i $LOCALNET -p/g' /etc/nayaboh-iptables.up.rules"
+    # replace the string between -o and -j with the value of the nayaboh config file 
     gksudo "sed -i 's/-A POSTROUTING -o .* -j MASQUERADE/-A POSTROUTING -o $INTERNET -j MASQUERADE/g' /etc/nayaboh-iptables.up.rules"
 else
+    # do the same as above, but using sudo instead of gksudo
     sudo sed -i "s/^interface=.*/interface=$LOCALNET/g" /etc/dnsmasq.conf
     sudo sed -i "s/^no-dhcp-interface=.*/no-dhcp-interface=$INTERNET/g" /etc/dnsmasq.conf
 
-    #dammit I had problems with this sed-regex, so I just replace the whole line :-/
-    sudo sed -i "s/-A PREROUTING -i .* -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 3128/-A PREROUTING -i $LOCALNET -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 3128/g" /etc/nayaboh-iptables.up.rules
+    sudo sed -i "s/-A PREROUTING -i .* -p/-A PREROUTING -i $LOCALNET -p/g" /etc/nayaboh-iptables.up.rules
     sudo sed -i "s/-A POSTROUTING -o .* -j MASQUERADE/-A POSTROUTING -o $INTERNET -j MASQUERADE/g" /etc/nayaboh-iptables.up.rules
 fi
 
