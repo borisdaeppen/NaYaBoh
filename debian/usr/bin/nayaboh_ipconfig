@@ -56,8 +56,9 @@ echo ''
 
 # NETWORK
 echo "### restart internal network interface"
-sudo ifdown eth1
-sudo ifup eth1
+LOCALNET=$(grep internal-interface /etc/nayaboh.conf | cut -d\= -f2)
+sudo ifdown $LOCALNET
+sudo ifup $LOCALNET
 
 # DNSMASQ
 echo "### restart dnsmasq"
