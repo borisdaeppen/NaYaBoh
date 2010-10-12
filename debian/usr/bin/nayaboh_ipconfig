@@ -55,10 +55,8 @@ echo ''
 ####################
 
 # NETWORK
-echo "### restart network interfaces"
-sudo ifdown eth0
+echo "### restart internal network interface"
 sudo ifdown eth1
-sudo ifup eth0
 sudo ifup eth1
 
 # DNSMASQ
@@ -106,11 +104,6 @@ else
     else
         sudo /etc/init.d/squid restart
     fi
-fi
-
-# If there is ANY cmdline arg we only close after ENTER pressed
-if [ $1 ]; then
-    read -p 'Please press ENTER to close the window'
 fi
 
 exit 0
