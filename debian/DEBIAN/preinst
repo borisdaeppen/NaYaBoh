@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
 # Copyright 2010 Boris Daeppen <boris_daeppen@bluewin.ch>
 # 
@@ -17,18 +17,28 @@
 # You should have received a copy of the GNU General Public License
 # along with NaYaBoh.  If not, see <http://www.gnu.org/licenses/>.
 
-
 # SHUT DOWN SYSTEM SERVICES
 # before the package nayaboh is installed
 # affected services should be down...
 
-echo '### STOPPING SQUID'
+
+echo '### SHUTTING DOWN SERVICES USED WITH NAYABOH'
+
+echo 'STOPPING DNSMASQ'
+if which invoke-rc.d >/dev/null 2>&1; then
+    invoke-rc.d dnsmasq stop
+else
+    /etc/init.d/dnsmasq stop
+fi
+
+
+echo 'STOPPING SQUID'
 # because ubuntu 10.04 is using upstart for squid
 # but debian does not I need to find out which system is used
 if which initctl && initctl --version | grep -i upstart
     then
-    echo "upstart installed, try use upstart..."
-    echo "stopping squid..."
+    echo 'upstart installed, try use upstart...'
+    echo 'stopping squid...'
     # use Upstart-Stop only if squid is up!
     if ps aux | grep squid | grep -v grep
         then
@@ -37,29 +47,22 @@ if which initctl && initctl --version | grep -i upstart
         sleep 5
         while ps aux | grep squid | grep -v grep
         do
-            echo "squid is still up, waiting 3 seconds..."
+            echo 'squid is still up, waiting 3 seconds...'
             sleep 3
         done
     fi  
     echo 'squid is down!'
 else
-    echo "no upstart installed, try use init script..."
+    echo 'no upstart installed, try use init script...'
     # should try invoke-rc.d, like told here:
     # http://www.debian.org/doc/debian-policy/ch-opersys.html#s9.3.3.2
     if which invoke-rc.d >/dev/null 2>&1; then
-        sudo invoke-rc.d squid stop
+        invoke-rc.d squid stop
     else
-        sudo /etc/init.d/squid stop
+        /etc/init.d/squid stop
     fi
 fi
 
-echo '### STOPPING DNSMASQ'
-# should try invoke-rc.d, like told here:
-# http://www.debian.org/doc/debian-policy/ch-opersys.html#s9.3.3.2
-if which invoke-rc.d >/dev/null 2>&1; then
-    sudo invoke-rc.d dnsmasq stop
-else
-    sudo /etc/init.d/dnsmasq stop
-fi
 
 exit 0
+
