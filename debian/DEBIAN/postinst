@@ -33,16 +33,30 @@ function say {
 
 # make sure that log dir/file exists
 if [ -d /var/log/nayaboh ]; then
-    echo "/var/log/nayaboh exists"
+    echo 'var/log/nayaboh exists'
 else
+    echo 'no dir /var/log/nayaboh found, create one'
     mkdir /var/log/nayaboh
 fi
+# reset logfile
 echo "" > $LOGFILE
 
 # start the work
 say "INSTALLATION OF NaYaBoh AT $TIMESTAMP"
 say "----------------------------------------------"
 say ""
+
+# if an old config file exists, read parameters
+INTERNET=eth0
+LOCALNET=eth1
+if [ -f /etc/nayaboh.conf ]; then
+    say 'etc/nayaboh.conf exists'
+    INTERNET=$(grep internet-interface /etc/nayaboh.conf | cut -d\= -f2)
+    LOCALNET=$(grep internal-interface /etc/nayaboh.conf | cut -d\= -f2)
+else
+    say 'no /etc/nayaboh.conf found'
+fi
+say "using $INTERNET for internet and $LOCALNET for local network"
 
 # enable the routing machanism of the linux kernel
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
@@ -53,9 +67,9 @@ iptables --flush
 iptables -t nat --flush
 # enable NAT and foreward http to the squid proxy
 iptables -P FORWARD ACCEPT
-iptables --table nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables --table nat -A POSTROUTING -o $INTERNET -j MASQUERADE
 # proxy trancparency
-iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 80 -j REDIRECT --to-port 3128
+iptables -t nat -A PREROUTING -i $LOCALNET -p tcp --dport 80 -j REDIRECT --to-port 3128
 
 iptables-save > /etc/nayaboh-iptables.up.rules
 
@@ -94,29 +108,29 @@ sed -i "7imaximum_object_size $squid_disk KB" /etc/squid/squid.conf
 # DNSMASQ
 say "### configuring dns and dhcp"
 cp -v /etc/dnsmasq.conf /etc/dnsmasq.conf_$BACKUP 2>&1 >> $LOGFILE
-echo 'bogus-priv
+echo "bogus-priv
 dhcp-range=192.168.111.20,192.168.111.200,12h
 domain-needed
 filterwin2k
-interface=eth1
-no-dhcp-interface=eth0
-no-hosts' > /etc/dnsmasq.conf
+interface=$LOCALNET
+no-dhcp-interface=$INTERNET
+no-hosts" > /etc/dnsmasq.conf
 
 # INTERFACES
 say "### configuring network interfaces"
 cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP 2>&1 >> $LOGFILE
-echo 'auto lo
+echo "auto lo
 iface lo inet loopback
 
-auto eth0
-iface eth0 inet dhcp
+auto $INTERNET
+iface $INTERNET inet dhcp
 
-auto eth1
-iface eth1 inet static
+auto $LOCALNET
+iface $LOCALNET inet static
         address 192.168.111.1
         netmask 255.255.255.0
         broadcast 192.168.111.255
-        network 192.168.111.0' > /etc/network/interfaces
+        network 192.168.111.0" > /etc/network/interfaces
 
 # APTITUDE
 echo "### configuring software sources" 2>&1 >> $LOGFILE
@@ -129,10 +143,10 @@ cat $(ls -1rt /etc/apt/sources.list_BACKUP* | head -n 1) | egrep -v "^#|updates|
 
 # NETWORK (executes also iptables script)
 say "### restart network interfaces"
-ifdown eth0 2>&1 >> $LOGFILE
-ifdown eth1 2>&1 >> $LOGFILE
-ifup eth0 2>&1 >> $LOGFILE
-ifup eth1 2>&1 >> $LOGFILE
+ifdown $INTERNET 2>&1 >> $LOGFILE
+ifdown $LOCALNET 2>&1 >> $LOGFILE
+ifup $INTERNET 2>&1 >> $LOGFILE
+ifup $LOCALNET 2>&1 >> $LOGFILE
 
 # DNSMASQ
 say "### restart dnsmasq"
