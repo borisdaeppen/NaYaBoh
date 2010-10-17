@@ -47,5 +47,10 @@ restart_dnsmasq
 echo "### restart squid"
 restart_squid
 
+echo ""
+echo 'You must take care for the network-card configuration your self!'
+echo 'e.g. /etc/network/interfaces'
+echo ""
+
 exit 0
 

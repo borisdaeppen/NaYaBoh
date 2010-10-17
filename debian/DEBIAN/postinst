@@ -119,7 +119,30 @@ no-hosts" > /etc/dnsmasq.conf
 # INTERFACES
 say "### configuring network interfaces"
 cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP 2>&1 >> $LOGFILE
-echo "auto lo
+
+# write iface config to file but omit those with are probably wlan
+# YES this is dirty code!
+# TODO: The case when both interfaces are wlan is NOT even handeled...
+if [ 'match' = $(perl -e "if('$INTERNET'=~'wlan'){print \"match\n\"}") ]
+then
+    echo "auto lo
+iface lo inet loopback
+
+auto $LOCALNET
+iface $LOCALNET inet static
+    address 192.168.111.1
+    netmask 255.255.255.0
+    broadcast 192.168.111.255
+    network 192.168.111.0" > /etc/network/interfaces
+elif [ 'match' = $(perl -e "if('$LOCALNET'=~'wlan'){print \"match\n\"}") ]
+then
+    echo "auto lo
+iface lo inet loopback
+
+auto $INTERNET
+iface $INTERNET inet dhcp" > /etc/network/interfaces
+else
+    echo "auto lo
 iface lo inet loopback
 
 auto $INTERNET
@@ -127,10 +150,11 @@ iface $INTERNET inet dhcp
 
 auto $LOCALNET
 iface $LOCALNET inet static
-        address 192.168.111.1
-        netmask 255.255.255.0
-        broadcast 192.168.111.255
-        network 192.168.111.0" > /etc/network/interfaces
+    address 192.168.111.1
+    netmask 255.255.255.0
+    broadcast 192.168.111.255
+    network 192.168.111.0" > /etc/network/interfaces
+fi
 
 # APTITUDE
 echo "### configuring software sources" 2>&1 >> $LOGFILE
