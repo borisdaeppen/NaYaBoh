@@ -83,7 +83,7 @@ say "### configuring squid proxy"
 # calculate storage values for squid
 total_memory=$(free -m | grep Mem | awk '{print $2}')
 squid_memory=$(echo "$total_memory / 4" | bc)
-total_disk=$(df -m /var/spool/squid | grep '/' | awk '{print $4}')
+total_disk=$(df -P -m /var/spool/squid | grep '/' | awk '{print $4}')
 squid_disk=$(echo "$total_disk / 2" | bc)
 say "total_disk=$total_disk MB"
 say "squid_disk=$squid_disk MB"
@@ -103,7 +103,6 @@ sed -i "4ihttp_access allow nayaboh" /etc/squid/squid.conf
 sed -i "5ihttp_port 3128 transparent" /etc/squid/squid.conf
 sed -i "6iredirect_program /usr/bin/adzapper.wrapper" /etc/squid/squid.conf
 # squid_disk is actually in MB, by treating it as KB I devide it by 1000
-sed -i "7imaximum_object_size $squid_disk KB" /etc/squid/squid.conf
 
 # DNSMASQ
 say "### configuring dns and dhcp"
