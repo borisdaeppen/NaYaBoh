@@ -17,8 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with NaYaBoh.  If not, see <http://www.gnu.org/licenses/>.
 
+##############
+# INITIALISE #
+##############
+
 # load some functions we defined in an external file
 . /usr/lib/nayaboh/functions.sh
+
+################
+# LOG FACILITY #
+################
 
 # some vars used for log
 TIMESTAMP=$(date +%Y-%m-%d_%H:%M:%S)
@@ -31,9 +39,15 @@ function say {
     echo $1 >> $LOGFILE
 }
 
+# cat and log at the same time
+function catlog {
+    cat $1
+    cat $1 >> $LOGFILE
+}
+
 # make sure that log dir/file exists
 if [ -d /var/log/nayaboh ]; then
-    echo 'var/log/nayaboh exists'
+    echo '/var/log/nayaboh exists'
 else
     echo 'no dir /var/log/nayaboh found, create one'
     mkdir /var/log/nayaboh
@@ -41,16 +55,22 @@ fi
 # reset logfile
 echo "" > $LOGFILE
 
-# start the work
+###################################################
+# MAIN WORK - CONFIG GNU/LINUX SYSTEM FOR NAYABOH #
+###################################################
+
+# write a nice title :-)
 say "INSTALLATION OF NaYaBoh AT $TIMESTAMP"
 say "----------------------------------------------"
 say ""
 
-# if an old config file exists, read parameters
-INTERNET=eth0
-LOCALNET=eth1
+# load old config
+say "### check for old config"
+INTERNET=eth0    # set default to eth0
+LOCALNET=eth1    # set default to eth1
 if [ -f /etc/nayaboh.conf ]; then
-    say 'etc/nayaboh.conf exists'
+    say '/etc/nayaboh.conf exists'
+    # old config file exists, read parameters
     INTERNET=$(grep internet-interface /etc/nayaboh.conf | cut -d\= -f2)
     LOCALNET=$(grep internal-interface /etc/nayaboh.conf | cut -d\= -f2)
 else
@@ -59,8 +79,11 @@ fi
 say "using $INTERNET for internet and $LOCALNET for local network"
 
 # enable the routing machanism of the linux kernel
+say '### enable routing in kernel'
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+say "$(grep net.ipv4.ip_forward /etc/sysctl.conf || echo 'ERROR')"
 
+# NAT and routing rules
 say "### configuring routing"
 # flush all configuration
 iptables --flush
@@ -71,12 +94,18 @@ iptables --table nat -A POSTROUTING -o $INTERNET -j MASQUERADE
 # proxy trancparency
 iptables -t nat -A PREROUTING -i $LOCALNET -p tcp --dport 80 -j REDIRECT --to-port 3128
 
+# save NAT and routing to file (unknown to apt)
 iptables-save > /etc/nayaboh-iptables.up.rules
+say "content of /etc/nayaboh-iptables.up.rules :"
+catlog /etc/nayaboh-iptables.up.rules
 
+# configure rules to load on network up
 echo -e "#!/bin/sh -e
 iptables-restore < /etc/nayaboh-iptables.up.rules
 exit 0" > /etc/network/if-up.d/nayaboh-iptables
 chmod +x /etc/network/if-up.d/nayaboh-iptables
+say "content of /etc/network/if-up.d/nayaboh-iptables :"
+catlog /etc/network/if-up.d/nayaboh-iptables
 
 # SQUID
 say "### configuring squid proxy"
@@ -102,7 +131,6 @@ sed -i "3iacl nayaboh src 192.168.111.0/255.255.255.0" /etc/squid/squid.conf
 sed -i "4ihttp_access allow nayaboh" /etc/squid/squid.conf
 sed -i "5ihttp_port 3128 transparent" /etc/squid/squid.conf
 sed -i "6iredirect_program /usr/bin/adzapper.wrapper" /etc/squid/squid.conf
-# squid_disk is actually in MB, by treating it as KB I devide it by 1000
 
 # DNSMASQ
 say "### configuring dns and dhcp"
@@ -114,12 +142,14 @@ filterwin2k
 interface=$LOCALNET
 no-dhcp-interface=$INTERNET
 no-hosts" > /etc/dnsmasq.conf
+say "content of /etc/dnsmasq.conf :"
+catlog /etc/dnsmasq.conf
 
 # INTERFACES
 say "### configuring network interfaces"
 cp -v /etc/network/interfaces /etc/network/interfaces_$BACKUP 2>&1 >> $LOGFILE
 
-# write iface config to file but omit those with are probably wlan
+# write iface config to file but omit those witch are probably wlan
 # YES this is dirty code!
 # TODO: The case when both interfaces are wlan is NOT even handeled...
 if [ 'match' = $(perl -e "if('$INTERNET'=~'wlan'){print \"match\n\"}") ]
@@ -154,11 +184,15 @@ iface $LOCALNET inet static
     broadcast 192.168.111.255
     network 192.168.111.0" > /etc/network/interfaces
 fi
+say "content of /etc/network/interfaces :"
+catlog /etc/network/interfaces
 
 # APTITUDE
 echo "### configuring software sources" 2>&1 >> $LOGFILE
 cp -v /etc/apt/sources.list /etc/apt/sources.list_$BACKUP 2>&1 >> $LOGFILE
 cat $(ls -1rt /etc/apt/sources.list_BACKUP* | head -n 1) | egrep -v "^#|updates|security" | sort -u > /etc/apt/sources.list
+say "content of /etc/apt/sources.list :"
+catlog /etc/apt/sources.list
 
 ####################
 # RESTART SERVICES #
@@ -173,7 +207,7 @@ ifup $LOCALNET 2>&1 >> $LOGFILE
 
 # DNSMASQ
 say "### restart dnsmasq"
-restart_dnsmasq
+restart_dnsmasq 2>&1 >> $LOGFILE
 
 # ROUTING
 say "### start routing"
@@ -181,11 +215,13 @@ sysctl -p /etc/sysctl.conf 2>&1 >> $LOGFILE
 
 # SQUID
 say "### restart squid"
-restart_squid
+restart_squid 2>&1 >> $LOGFILE
 
 # I would like to update the package chache
-# but I can't since I myself block it :-)
+# but I can't since I myself lock it :-)
 say "### you should type 'sudo aptitude update' to update your cache"
 
+say ""
+say "----------------------------------------------"
 say "INSTALLATION FINISHED AT $(date +%Y-%m-%d_%H:%M:%S)"
 
