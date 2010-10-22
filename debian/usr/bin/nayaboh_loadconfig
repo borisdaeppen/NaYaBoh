@@ -35,17 +35,36 @@ if [ $DISPLAY ]; then
     # similar change to a second parameter in dnsmasq.conf
     gksudo "sed -i 's/^no-dhcp-interface=.*/no-dhcp-interface=$INTERNET/g' /etc/dnsmasq.conf"
 
-    # replace the string between -i and -p with the value of the nayaboh config file 
-    gksudo "sed -i 's/-A PREROUTING -i .* -p/-A PREROUTING -i $LOCALNET -p/g' /etc/nayaboh-iptables.up.rules"
-    # replace the string between -o and -j with the value of the nayaboh config file 
-    gksudo "sed -i 's/-A POSTROUTING -o .* -j MASQUERADE/-A POSTROUTING -o $INTERNET -j MASQUERADE/g' /etc/nayaboh-iptables.up.rules"
+    # NAT and routing rules
+    echo "### reconfiguring routing"
+    # flush all configuration
+    gksudo "iptables --flush"
+    gksudo "iptables -t nat --flush"
+    # enable NAT and foreward http to the squid proxy
+    gksudo "iptables -P FORWARD ACCEPT"
+    gksudo "iptables --table nat -A POSTROUTING -o $INTERNET -j MASQUERADE"
+    # proxy trancparency
+    gksudo "iptables -t nat -A PREROUTING -i $LOCALNET -p tcp --dport 80 -j REDIRECT --to-port 3128"
+    # save NAT and routing to file
+    gksudo "bash -c 'iptables-save > /etc/nayaboh-iptables.up.rules'"
+
 else
     # do the same as above, but using sudo instead of gksudo
     sudo sed -i "s/^interface=.*/interface=$LOCALNET/g" /etc/dnsmasq.conf
     sudo sed -i "s/^no-dhcp-interface=.*/no-dhcp-interface=$INTERNET/g" /etc/dnsmasq.conf
 
-    sudo sed -i "s/-A PREROUTING -i .* -p/-A PREROUTING -i $LOCALNET -p/g" /etc/nayaboh-iptables.up.rules
-    sudo sed -i "s/-A POSTROUTING -o .* -j MASQUERADE/-A POSTROUTING -o $INTERNET -j MASQUERADE/g" /etc/nayaboh-iptables.up.rules
+    # NAT and routing rules
+    echo "### reconfiguring routing"
+    # flush all configuration
+    sudo iptables --flush
+    sudo iptables -t nat --flush
+    # enable NAT and foreward http to the squid proxy
+    sudo iptables -P FORWARD ACCEPT
+    sudo iptables --table nat -A POSTROUTING -o $INTERNET -j MASQUERADE
+    # proxy trancparency
+    sudo iptables -t nat -A PREROUTING -i $LOCALNET -p tcp --dport 80 -j REDIRECT --to-port 3128
+    # save NAT and routing to file
+    sudo bash -c 'iptables-save > /etc/nayaboh-iptables.up.rules'
 fi
 
 ####################
@@ -61,8 +80,10 @@ echo "### restart dnsmasq"
 restart_dnsmasq
 
 # SQUID
-echo "### restart squid"
-restart_squid
+# TODO: squid restart is not needed, isn't it?
+# we could do it just to be safe... but it always needs a while!
+#echo "### restart squid"
+#restart_squid
 
 echo ""
 echo 'You must take care for the network-card configuration your self!'
