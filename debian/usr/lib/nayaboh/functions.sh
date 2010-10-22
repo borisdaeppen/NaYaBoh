@@ -28,15 +28,6 @@ function restart_dnsmasq {
     fi
 }
 
-function stop_dnsmasq {
-    if which invoke-rc.d >/dev/null 2>&1; then
-        sudo invoke-rc.d dnsmasq stop
-    else
-        sudo /etc/init.d/dnsmasq stop
-    fi
-}
-
-
 function restart_squid {
     echo 'restart squid'
     # because ubuntu 10.04 is using upstart for squid
