@@ -21,6 +21,9 @@
 # before the package nayaboh is installed
 # affected services should be down...
 
+# TODO: is this script run before or after dependency resolving?
+#       if it's before we need to make error handling
+#       in case of squid/dnsmasq is not even installed
 
 echo '### SHUTTING DOWN SERVICES USED WITH NAYABOH'
 
