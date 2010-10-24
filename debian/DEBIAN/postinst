@@ -114,18 +114,14 @@ total_memory=$(free -m | grep Mem | awk '{print $2}')
 # I try to maximize the memory for squid.
 # I use some magic math to achive the goal.
 # I hope it works... 
-os_mem_reserve=400 # in MB, is what I think the OS should have on its own for sure
-total_free=$(echo "$total_memory - $os_mem_reserve" | bc)
-squid_memory=1 #just for declaration
-if [ $total_free -lt 10 ]; then
-    squid_memory=1
-    echo "WARNING: you should have more memory in your hardware. $total_memory MB detected."
-elif [ $total_free -lt 500 ]; then
-    squid_memory=$(echo "$total_free / 2" | bc)
-elif [ $total_free -le 1000 ]; then
-    squid_memory=$(echo "$total_free * 3 / 4" | bc)
-elif [ $total_free -gt 1000 ]; then
-    squid_memory=$(echo "$total_free * 5 / 6" | bc)
+os_mem_reserve=300 # in MB, is what I think the OS should have on its own for sure
+
+squid_memory=1
+if [ $total_memory -gt $os_mem_reserve ]; then
+    free=$(echo "$total_memory - $os_mem_reserve" | bc)
+    squid_memory=$(echo "scale=2;$free * ($free / $total_memory)" | bc | cut -d\. -f1)
+else
+    say "WARNING: Not enough memory! Found: $total_memory MB"
 fi
 
 # calculate disk usage for squid
