@@ -118,7 +118,7 @@ os_mem_reserve=300 # in MB, is what I think the OS should have on its own for su
 
 squid_memory=1
 if [ $total_memory -gt $os_mem_reserve ]; then
-    free=$(echo "$total_memory - $os_mem_reserve" | bc)
+    free=$(echo "$total_memory - $os_mem_reserve - ($total_memory / 20)" | bc)
     squid_memory=$(echo "scale=2;$free * ($free / $total_memory)" | bc | cut -d\. -f1)
 else
     say "WARNING: Not enough memory! Found: $total_memory MB"
