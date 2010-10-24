@@ -78,7 +78,7 @@ else
 fi
 say "using $INTERNET for internet and $LOCALNET for local network"
 
-# enable the routing machanism of the linux kernel
+# enable the routing mechanism of the linux kernel
 say '### enable routing in kernel'
 echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 say "$(grep net.ipv4.ip_forward /etc/sysctl.conf || echo 'ERROR')"
@@ -109,11 +109,30 @@ catlog /etc/network/if-up.d/nayaboh-iptables
 
 # SQUID
 say "### configuring squid proxy"
-# calculate storage values for squid
+# calculate memory usage for squid
 total_memory=$(free -m | grep Mem | awk '{print $2}')
-squid_memory=$(echo "$total_memory / 4" | bc)
+# I try to maximize the memory for squid.
+# I use some magic math to achive the goal.
+# I hope it works... 
+os_mem_reserve=400 # in MB, is what I think the OS should have on its own for sure
+total_free=$(echo "$total_memory - $os_mem_reserve" | bc)
+squid_memory=1 #just for declaration
+if [ $total_free -lt 10 ]; then
+    squid_memory=1
+    echo "WARNING: you should have more memory in your hardware. $total_memory MB detected."
+elif [ $total_free -lt 500 ]; then
+    squid_memory=$(echo "$total_free / 2" | bc)
+elif [ $total_free -le 1000 ]; then
+    squid_memory=$(echo "$total_free * 3 / 4" | bc)
+elif [ $total_free -gt 1000 ]; then
+    squid_memory=$(echo "$total_free * 5 / 6" | bc)
+fi
+
+# calculate disk usage for squid
 total_disk=$(df -P -m /var/spool/squid | grep '/' | awk '{print $4}')
 squid_disk=$(echo "$total_disk / 2" | bc)
+
+# print results (also to logfile)
 say "total_disk=$total_disk MB"
 say "squid_disk=$squid_disk MB"
 say "total_memory=$total_memory MB"
