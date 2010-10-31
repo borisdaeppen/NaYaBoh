@@ -3,7 +3,7 @@ Version: 0.4.2
 Section: utils
 Priority: extra
 Architecture: all
-Depends: bash (>= 3.2), bc, dnsmasq, squid, adzapper, iptables, dialog, sudo, wget, libgd-graph-perl, netstat-nat
+Depends: bash (>= 3.2), bc, dnsmasq, adzapper, squid, iptables, dialog, sudo, wget, libgd-graph-perl, netstat-nat
 Suggests: gkrellm
 Maintainer: Boris Däppen <boris_daeppen@bluewin.ch>
 Description: Set up a very simple internet server
@@ -13,4 +13,4 @@ Description: Set up a very simple internet server
  .
  NaYaBoh shares and speeds up slow internet connection to several computers.
  Useful for remote classrooms, cybars or offices.
-Installed-Size: 104
+Installed-Size: 128
