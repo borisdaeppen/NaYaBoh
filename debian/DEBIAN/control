@@ -5,7 +5,7 @@ Priority: extra
 Architecture: all
 Depends: bash (>= 3.2), bc, dnsmasq, adzapper, squid, iptables, dialog, sudo, wget, libgd-graph-perl, netstat-nat
 Suggests: gkrellm
-Maintainer: Boris Däppen <boris_daeppen@bluewin.ch>
+Maintainer: Boris Daeppen <boris_daeppen@bluewin.ch>
 Description: Set up a very simple internet server
  NaYaBoh will download a set of services and configure them.
  NaYaBoh will also make serious changes to your system configuration.
