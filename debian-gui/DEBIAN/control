@@ -4,8 +4,8 @@ Section: utils
 Priority: extra
 Architecture: all
 Depends: nayaboh (>= 0.4.2), perl, libgtk2-perl, gksu, firefox | iceweasel | epiphany
-Maintainer: Boris Däppen <boris_daeppen@bluewin.ch>
+Maintainer: Boris Daeppen <boris_daeppen@bluewin.ch>
 Description: graphical frontend for the package nayaboh
  This package provides a graphical frontend (GUI) for the NaYaBoh tools.
  It also contains the official website as a local documentation.
-Installed-Size: 324
+Installed-Size: 332

@@ -1,11 +1,12 @@
 168465a17bff285a1f3ea1f9cc6c960a  usr/bin/nayaboh_gui
-0c1d0e7fcfabdd0478c73541ec0e4394  usr/share/doc/nayaboh-gui/changelog.Debian.gz
-7adafb81d784fd9dea2d396a1afdebca  usr/share/doc/nayaboh-gui/changelog.gz
+a53636bfac64dd0f70b01d28d0b5903d  usr/share/doc/nayaboh-gui/changelog.Debian.gz
+963f79c768043fae57061b6868b7f877  usr/share/doc/nayaboh-gui/changelog.gz
 09bcc34f5fdf52c41b77a91a3163c484  usr/share/doc/nayaboh-gui/html/style.css
-5a9104a350e45454de948e3de6f7a08c  usr/share/doc/nayaboh-gui/html/maintenance.html
-36d38e276efaaa160a7630c8d13bbff1  usr/share/doc/nayaboh-gui/html/thx.html
-4f71f7f5302175ca404852678fb7dd5d  usr/share/doc/nayaboh-gui/html/index.html
-0908b86d403326763013229616168cfb  usr/share/doc/nayaboh-gui/html/installation.html
+4ce2658d70782774916b1b3abfddf64a  usr/share/doc/nayaboh-gui/html/maintenance.html
+e1a610ecb62b790c3c8203d068f5674b  usr/share/doc/nayaboh-gui/html/thx.html
+da888c7d33548d725f67aac82cac1800  usr/share/doc/nayaboh-gui/html/index.html
+9717188a268e368922b1d62833d52a42  usr/share/doc/nayaboh-gui/html/index_de.html
+7e4b97c7ce0a4cee6dbe65d5f6374971  usr/share/doc/nayaboh-gui/html/installation.html
 599edeec9b2dfe257b8a6762f8d82365  usr/share/doc/nayaboh-gui/html/pics/nayaboh_benchmark_example.png
 19721197fe77153e2f15f347f236ae2c  usr/share/doc/nayaboh-gui/html/pics/nayaboh_setup.png
 ef8bf6ecf8e06e7e963f6a50a0ae115a  usr/share/doc/nayaboh-gui/html/pics/nayaboh_limbe.jpg
@@ -13,6 +14,6 @@ ef8bf6ecf8e06e7e963f6a50a0ae115a  usr/share/doc/nayaboh-gui/html/pics/nayaboh_li
 3083b24612f0ef8d7963406545886313  usr/share/doc/nayaboh-gui/html/pics/my_email.png
 1b8e662a8be1af94c18df8aed1ec0d2c  usr/share/doc/nayaboh-gui/html/pics/nayaboh_manual_benchmark.png
 02ffcb54af02fa68e6050abbc1f1bdd1  usr/share/doc/nayaboh-gui/copyright
-1c4baf3473548e4d7c8eb4395421ed2a  usr/share/man/man1/nayaboh_gui.1.gz
+b14df74375ea04c63e0de599e0a046af  usr/share/man/man1/nayaboh_gui.1.gz
 34eb4f54261da2249c6bbd2f1c5187cf  usr/share/icons/nayaboh48x48.png
 21e5b81ee0d9f36b2ed7b2525ed9000e  usr/share/applications/nayaboh_gui.desktop
