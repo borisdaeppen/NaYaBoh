@@ -30,7 +30,7 @@
   <p>This tools are available in the command line for those who
   don't have a GUI installed.</p>
   <pre class="code">
-<code>nayaboh_benchmark<br />nayaboh_connections<br />nayaboh_firewall<br />nayaboh_installreport<br />nayaboh_ipconfig<br />nayaboh_proxylo<span style="font-family: Andale Mono,Lucida Console,Monaco,fixed,monospace;">g</span></code>
+<code>nayaboh_benchmark<br />nayaboh_connections<br />nayaboh_firewall<br />nayaboh_installreport<br />nayaboh_ipconfig<br />nayaboh_loadconfig<br />nayaboh_proxylo<span style="font-family: Andale Mono,Lucida Console,Monaco,fixed,monospace;">g</span></code>
 </pre>
 
   <p>A short explanation of this tools:</p>
@@ -54,7 +54,12 @@
 
     <li><strong>IP config:</strong> Change the IP of your internal
     network. Is asking options interactive. This script is
-    considered very unstable, use with care.<br /></li>
+    considered very unstable, use with care.</li>
+
+    <li><span style="font-weight: bold;">Load configuration:</span>
+    Read values from /etc/nayaboh.conf. Use this only if you know
+    what you are doing. Also be aware that you need to configure
+    the network interfaces manually.<br /></li>
 
     <li><strong>Proxy Log View:</strong> Follow live the requests
     handled by the proxy. Takes no arguments.</li>
@@ -72,7 +77,12 @@ GUI for NaYaBoh<br />
 </pre>
 
   <p>With this release, the GUI does not provide the full
-  functionality.</p>
+  functionality.<br />
+  <span style="font-style: italic;">Attention to users of Debian
+  Lenny (stable). The gtkperl library seems to be to old, so the
+  GUI may not run. If you use Debian stable you don't need a GUI
+  anyways... so no fix for now. (I am happy if you send me a bugfix
+  for this!)</span><br /></p>
 
   <h2>How does it work?</h2>
 
@@ -108,18 +118,17 @@ GUI for NaYaBoh<br />
   &nbsp;<br />
   &nbsp;<br /></p>
 
-  <p><a href="http://validator.w3.org/check?uri=referer"><img src=
-  "http://www.w3.org/Icons/valid-xhtml11" alt=
+  <p><a href=
+  "http://validator.w3.org/check?uri=referer"><img style="border: 0pt none ; width: 88px; height: 31px;"
+  src="http://www.w3.org/Icons/valid-xhtml11" alt=
   "Valid XHTML 1.1" /></a> <a href=
   "http://jigsaw.w3.org/css-validator/check/referer"><img style=
   "border: 0pt none ; width: 88px; height: 31px;" src=
   "http://jigsaw.w3.org/css-validator/images/vcss" alt=
   "Valid CSS!" /></a><br />
-  <span style="font-size: smaller;">This website may be ugly - but
-  standard conform!</span><br />
+  <span style="font-size: smaller;">This website is standard
+  conform.</span><br />
   <span style="font-size: smaller;">This website was last updated
-  for the NaYaBoh</span> <span style="font-size: smaller;">0.4.2
-  and GUI 0.1</span> <span style=
-  "font-size: smaller;">release.</span></p>
+  for the NaYaBoh 0.4.3 and GUI 0.1 release.</span></p>
 </body>
 </html>
