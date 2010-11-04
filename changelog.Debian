@@ -1,3 +1,17 @@
+nayaboh (0.4.3) unstable; urgency=low
+
+  * flush of iptables as preparation
+  * website (documentation) frontpage in German available
+  * introduced configuration file and nayaboh_loadconfig
+  * excluded redundant code to library
+  * can handle wlan quite well now
+  * better memory reservation for squid
+  * severe bugfix for squid disc allocation on debian lenny
+  * try to avoid ubuntu bug (658700 in launchpad)
+  * fixed a lot small things, typos, bugs, whatever
+
+ -- Boris Däppen <boris_daeppen@bluewin.ch>  Mon, 1 Nov 2010 00:00:00 +0000
+
 nayaboh (0.4.2) unstable; urgency=low
 
   * introducing nayaboh-gui package
