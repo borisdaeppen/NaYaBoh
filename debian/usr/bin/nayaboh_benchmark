@@ -57,6 +57,34 @@ my @pages = (   'http://opensource.org/',
                 'http://nayaboh.sourceforge.net/'
                 );
 
+# read some system parameters to enhance the information of the graphic
+# I do this at beginning so that RX/TX are not influenced by the benchmark
+my $hostname = `uname -n`;
+my $date     = `date`;
+my $uptime   = `uptime | cut -d, -f1 | cut -d' ' -f1-3 --complement`;
+my $RX;
+my $TX;
+# read from config file
+my $internet=`grep internet-interface /etc/nayaboh.conf | cut -d\= -f2`; chomp ($internet);
+my $localnet=`grep internal-interface /etc/nayaboh.conf | cut -d\= -f2`; chomp ($localnet);
+# read TX/RX bytes from network interfaces
+if (defined $ENV{'DISPLAY'} and $ENV{'DISPLAY'} =~ /:/) {
+    $RX       = `gksudo ifconfig $internet | grep 'RX bytes' | cut -d: -f2 | cut -d')' -f1 | cut -d'(' -f2`;
+    $TX       = `gksudo ifconfig $localnet | grep 'TX bytes' | cut -d: -f3 | cut -d')' -f1 | cut -d'(' -f2`;
+}
+else {
+    $RX       = `sudo ifconfig $internet | grep 'RX bytes' | cut -d: -f2 | cut -d')' -f1 | cut -d'(' -f2`;
+    $TX       = `sudo ifconfig $localnet | grep 'TX bytes' | cut -d: -f3 | cut -d')' -f1 | cut -d'(' -f2`;
+}
+# read version of nayaboh installed
+my $version  = `dpkg -l nayaboh | tail -n 1 | awk '{ print \$3 }'`;
+# voila: this is the result of the last 20 lines of code :-)
+chomp ($hostname);
+chomp ($date);
+chomp ($uptime);
+chomp ($RX);
+chomp ($TX);
+chomp ($version);
 
 # loop through all pages, download them
 for (my $i=1;$i<=$rounds;$i++) {
@@ -119,31 +147,6 @@ $graph->set_legend('Direct', 'NaYaBoh');
 my $gd = $graph->plot( \@data ) or die $graph->error;
 
 # add some additional information to the chart
-my $hostname = `uname -n`;
-my $date     = `date`;
-my $uptime   = `uptime | cut -d, -f1 | cut -d' ' -f1-3 --complement`;
-my $RX;
-my $TX;
-# read from config file
-my $internet=`grep internet-interface /etc/nayaboh.conf | cut -d\= -f2`; chomp ($internet);
-my $localnet=`grep internal-interface /etc/nayaboh.conf | cut -d\= -f2`; chomp ($localnet);
-
-if (defined $ENV{'DISPLAY'} and $ENV{'DISPLAY'} =~ /:/) {
-
-    $RX       = `gksudo ifconfig $internet | grep 'RX bytes' | cut -d: -f2 | cut -d')' -f1 | cut -d'(' -f2`;
-    $TX       = `gksudo ifconfig $localnet | grep 'TX bytes' | cut -d: -f3 | cut -d')' -f1 | cut -d'(' -f2`;
-}
-else {
-    $RX       = `sudo ifconfig $internet | grep 'RX bytes' | cut -d: -f2 | cut -d')' -f1 | cut -d'(' -f2`;
-    $TX       = `sudo ifconfig $localnet | grep 'TX bytes' | cut -d: -f3 | cut -d')' -f1 | cut -d'(' -f2`;
-}
-my $version  = `dpkg -l nayaboh | tail -n 1 | awk '{ print \$3 }'`;
-chomp ($hostname);
-chomp ($date);
-chomp ($uptime);
-chomp ($RX);
-chomp ($TX);
-chomp ($version);
 use GD;
 $gd->string(gdSmallFont,60,40,"$hostname, $uptime uptime",1);
 $gd->string(gdSmallFont,60,60,"$RX from Internet",1);
