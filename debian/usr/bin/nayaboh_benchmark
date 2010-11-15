@@ -155,13 +155,16 @@ $gd->string(gdTinyFont,10,390,$date,1);
 $gd->string(gdTinyFont,670,390,"created by NaYaBoh v$version",1);
 
 # print the chart to file
-open(IMG, '>NaYaBoh_Benchmark.png') or die $!;
+my $filenamedate = `date +%F_%H-%M-%S`;
+chomp($filenamedate);
+my $f = ">NaYaBoh_Benchmark_$filenamedate.png";
+open(IMG, $f) or die $!;
 binmode IMG;
 print IMG $gd->png;
 close IMG;
 
 # try to display picture, or give message
-`firefox NaYaBoh_Benchmark.png || iceweasel NaYaBoh_Benchmark.png || epiphany NaYaBoh_Benchmark.png || echo '### SEE PICTURE ./NaYaBoh_Benchmark.png'`;
+`firefox $f || iceweasel $f || epiphany $f || echo '### SEE PICTURE ./$f'`;
 
 
 
