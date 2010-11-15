@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Copyright 2010 Boris Daeppen <boris_daeppen@bluewin.ch>
+# 
+# This file is part of NaYaBoh.
+# 
+# NaYaBoh is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# NaYaBoh is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with NaYaBoh.  If not, see <http://www.gnu.org/licenses/>.
+
+CMD=$1
+VAL=$2
+INTERNET=$(grep internet-interface /etc/nayaboh.conf | cut -d\= -f2)
+if [ -z "$INTERNET" ]; then
+    echo "internet interface not defined in /etc/nayaboh.conf $INTERNET"
+    exit 1
+fi
+
+function _help {
+    echo 'This program knows two arguments:'
+    echo '    --start [1-10]    drops 1 to 10% of TCP packets of internet'
+    echo '    --stop            back to normal internet'
+    echo 'To show this help type anything else or nothing'
+}
+
+function _start {
+    VAL_CHECKED=''
+
+    if [ -e /tmp/NaYaBoh/disturbe_internet ]; then
+        echo 'first stop the current setting (--stop)'
+        exit 1
+    fi
+
+    if [ $VAL -le 9 ]; then
+        if [ $VAL -ge 1 ]; then
+            VAL_CHECKED="0$VAL"
+        fi
+    elif [ $VAL -eq 10 ]; then
+        VAL_CHECKED=10
+    fi
+
+    if [ $VAL_CHECKED -le 10 ]; then
+        echo "dropping $VAL_CHECKED% of traffic"
+        sudo iptables -A INPUT -i $INTERNET -m statistic --mode random --probability "0.$VAL_CHECKED" -j DROP
+        echo $VAL_CHECKED > /tmp/NaYaBoh/disturbe_internet
+    else
+        echo "wrong value: $VAL"
+        exit 1
+    fi
+}
+
+function _stop {
+    if [ -e /tmp/NaYaBoh/disturbe_internet ]; then
+        VAL_SAVED=$(cat /tmp/NaYaBoh/disturbe_internet)
+        sudo iptables -D INPUT -i $INTERNET -m statistic --mode random --probability "0.$VAL_SAVED" -j DROP
+        rm /tmp/NaYaBoh/disturbe_internet
+        echo "stopped dropping of $VAL_SAVED% of traffic"
+    else
+        echo 'nothing to stop'
+    fi
+}
+
+if [ -z $CMD ]; then
+    echo 'No argument, displaying help...'
+    _help
+elif [ $CMD = '--start' ]; then
+    _start
+elif [ $CMD = '--stop' ]; then
+    _stop
+else
+    echo 'Unknown argument, displaying help...'
+    _help
+fi
+

@@ -122,6 +122,49 @@ rm debian-gui/usr/share/doc/nayaboh-gui/changelog.Debian.gz
 # remove html
 rm -r debian-gui/usr/share/doc/nayaboh-gui/html
 
+#####################
+# BUILD NAYABOH-DEV #
+#####################
+
+echo 'START NAYABOH-DEV PACKAGE'
+
+# pack manpage
+mkdir -p debian-dev/usr/share/man/man1
+cp documentation/manpage/nayaboh_disturb.1 debian-dev/usr/share/man/man1/
+gzip --best debian-dev/usr/share/man/man1/nayaboh*.1
+
+#pack changelog
+cp changelog debian-dev/usr/share/doc/nayaboh-dev/
+cp changelog-dev.Debian debian-dev/usr/share/doc/nayaboh-dev/changelog.Debian
+gzip --best debian-dev/usr/share/doc/nayaboh-dev/changelog
+gzip --best debian-dev/usr/share/doc/nayaboh-dev/changelog.Debian
+
+# update md5sums file of dep-tree
+echo -e "\tupdate md5sums file"
+rm debian-dev/DEBIAN/md5sums
+for i in $( find ./debian-dev -path ./debian-dev/DEBIAN -prune -o -type f -print)
+do
+    md5sum $i | sed -e "s/\.\/debian-dev\///g" >> debian-dev/DEBIAN/md5sums
+done
+
+# renew the size information
+sed -i '/Installed-Size/ d' debian-dev/DEBIAN/control # delete
+echo "Installed-Size: $(du -s --exclude DEBIAN debian-dev/ | cut -f1)" >> debian-dev/DEBIAN/control
+
+# create deb package
+echo -e "\tbuild package"
+fakeroot dpkg-deb --build debian-dev \
+$( grep Package debian-dev/DEBIAN/control | cut -d" " -f2 )_\
+$( grep Version debian-dev/DEBIAN/control | cut -d" " -f2 )_\
+$( grep Architecture debian-dev/DEBIAN/control | cut -d" " -f2 )\
+.deb
+
+# remove packed things,
+# I don't need it in src
+rm debian-dev/usr/share/man/man1/nayaboh*.1.gz
+rm debian-dev/usr/share/doc/nayaboh-dev/changelog.gz
+rm debian-dev/usr/share/doc/nayaboh-dev/changelog.Debian.gz
+
 echo 'DONE'
 echo "don't forget to check the packages with lintian!"
 

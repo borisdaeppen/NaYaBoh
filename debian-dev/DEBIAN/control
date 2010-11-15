@@ -1,0 +1,10 @@
+Package: nayaboh-dev
+Version: 0.1
+Section: utils
+Priority: extra
+Architecture: all
+Depends: iptables
+Maintainer: Boris Daeppen <boris_daeppen@bluewin.ch>
+Description: dev-tools for the package nayaboh
+ A small collection of tools that might help in development of NaYaBoh.
+Installed-Size: 52
