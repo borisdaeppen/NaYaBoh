@@ -53,7 +53,7 @@ my @time_noproxy = ();
 
 my @pages = (   'http://opensource.org/',
                 'http://www.gnu.org/',
-                'http://home.gna.org/nayaboh/',
+                'http://en.wikipedia.org/wiki/Earth',
                 'http://nayaboh.sourceforge.net/'
                 );
 
@@ -157,8 +157,8 @@ $gd->string(gdTinyFont,670,390,"created by NaYaBoh v$version",1);
 # print the chart to file
 my $filenamedate = `date +%F_%H-%M-%S`;
 chomp($filenamedate);
-my $f = ">NaYaBoh_Benchmark_$filenamedate.png";
-open(IMG, $f) or die $!;
+my $f = "NaYaBoh_Benchmark_$filenamedate.png";
+open(IMG, ">$f") or die $!;
 binmode IMG;
 print IMG $gd->png;
 close IMG;
